@@ -15,8 +15,9 @@ class Ship : public GameObject{
   ~Ship();
   CapEngine::Rectangle boundingPolygon(); //GameObject
   void render(); // GameObject
+  void handleCollision(CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
   void init();
-  void move(CapEngine::Vector direction);
+  void move(CapEngine::Vector& direction, int timeStep);
   
 
  private:

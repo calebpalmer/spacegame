@@ -5,7 +5,7 @@
 using namespace std;
 using namespace CapEngine;
 
-Ship::Ship() {
+Ship::Ship() :  health(100), velocity(5) {
   position.x = 600;
   position.y = 800 - (HEIGHT * 2);
 }
@@ -31,4 +31,24 @@ Rectangle Ship::boundingPolygon(){
 void Ship::render(){
   Rectangle rect = boundingPolygon();
   VideoManager::getInstance().drawSurface(rect.x, rect.y, surface);
+}
+
+void Ship::move(Vector& direction, int timeStep){
+  direction.scale(velocity);
+  position = position + direction;
+}
+
+void Ship::handleCollision(CollisionType type, CollisionClass class_, GameObject* otherObject){
+  if(class_ == COLLISION_WALL){
+    switch(type){
+    case COLLISION_LEFT:
+      position.x += velocity;
+      break;
+      case COLLISION_RIGHT:
+	position.x -= velocity;
+	break;
+    default:
+      break;
+    }
+  }
 }
