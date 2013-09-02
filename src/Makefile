@@ -9,7 +9,7 @@ CFLAGS= -g -Wall -D$(PLATFORM) -DDEBUG -DLOGLEVEL=$(LOGLEVEL) -std=c++0x $(INCLU
 LIBS=
 #CFLAGS= -O3 -D$(PLATFORM) -DDEBUG
 
-objects = spacecombat.o ship.o
+objects = spacecombat.o ship.o map1.o
 
 #Application
 spacecombat: $(objects)

@@ -3,7 +3,11 @@
 
 #include "CapEngine.h"
 #include "ship.h"
+#include "map.h"
+#include "map1.h"
 #include "gameobject.h"
+
+#include <memory>
 
 struct CollisionEvent{
   GameObject* object1;
@@ -33,9 +37,9 @@ class SpaceCombatGame : IEventSubscriber{
  private:
   bool quit;
   Ship ship;
+  Map1 map;
   CapEngine::TimeStep timeStep;
   CapEngine::Keyboard keyboard;
-  CapEngine::Surface* background;
 };
 
 #endif // SPACECOMBATGAME

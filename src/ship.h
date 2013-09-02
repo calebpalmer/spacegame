@@ -1,6 +1,7 @@
 #ifndef SHIP_H
 #define SHIP_H
 
+#include "CapEngine.h"
 #include "gun.h"
 #include "gameobject.h"
 
@@ -17,7 +18,7 @@ class Ship : public GameObject{
   void render(); // GameObject
   void handleCollision(CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
   void init();
-  void move(CapEngine::Vector& direction, int timeStep);
+  void move(CapEngine::Vector& direction, CapEngine::real timeStep);
   
 
  private:

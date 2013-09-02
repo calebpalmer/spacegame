@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "spacecombat.h"
+#include "map1.h"
 
 using namespace CapEngine;
 using namespace std;
@@ -16,7 +17,7 @@ SpaceCombatGame::SpaceCombatGame() {
 }
 
 SpaceCombatGame::~SpaceCombatGame(){
-  VideoManager::getInstance().closeSurface(background);
+
 }
 
 void SpaceCombatGame::init() {
@@ -38,10 +39,8 @@ void SpaceCombatGame::init() {
 
   // initialise objects
   ship.init();
+  map.init();
   
-  // initialise background
-  background = VideoManager::getInstance().loadImage("res/level1.png");
-
   //initialize keyboard map
   keyboard.keyMap[Keyboard::CAP_KEYUP].state = Keyboard::CAP_UNPRESSED;
   keyboard.keyMap[Keyboard::CAP_KEYDOWN].state = Keyboard::CAP_UNPRESSED;
@@ -79,6 +78,9 @@ void SpaceCombatGame::update() {
     ship.move(direction, timeStep.lastTimeStep);
   }
 
+
+  map.update(timeStep.lastTimeStep);
+
   // check for collisions
   vector<CollisionEvent> collisions = getCollisions();
   while(collisions.size() >  0){
@@ -91,7 +93,7 @@ void SpaceCombatGame::update() {
 }
 
 void SpaceCombatGame::render() {
-  VideoManager::getInstance().drawSurface(0, 0, background);
+  map.render(screenConfig.width, screenConfig.height);
   ship.render();
   VideoManager::getInstance().drawScreen();
 }

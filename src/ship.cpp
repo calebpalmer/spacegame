@@ -33,7 +33,7 @@ void Ship::render(){
   VideoManager::getInstance().drawSurface(rect.x, rect.y, surface);
 }
 
-void Ship::move(Vector& direction, int timeStep){
+void Ship::move(Vector& direction, real timeStep){
   direction.scale(velocity);
   position = position + direction;
 }
