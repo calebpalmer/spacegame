@@ -1,5 +1,5 @@
 PLATFORM=UNIX
-CAPENGINEPATH=/home/caleb/Projects/games/github/capengine
+CAPENGINEPATH=../../github/capengine
 LOGLEVEL=Logger::CDEBUG
 CC=g++
 CPP=g++

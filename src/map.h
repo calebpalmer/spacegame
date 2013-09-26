@@ -1,6 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "CapEngine.h"
+
 class Map{
  public:
   virtual ~Map() {}

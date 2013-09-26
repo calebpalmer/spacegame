@@ -21,25 +21,24 @@ SpaceCombatGame::~SpaceCombatGame(){
 }
 
 void SpaceCombatGame::init() {
-  // get Logger
-  Logger& logger = Logger::getInstance();
-
   // set current directory
   setCurrentDir("../");
   logger.log("current directory is set to " + getCurrentDir(), Logger::CDEBUG);
 
+  p_videoManager.reset(new VideoManager());
+  p_videoManager->initSystem(screenConfig);
+
   // subscribe to events
-  EventDispatcher& eventDispatcher = EventDispatcher::getInstance();
-  eventDispatcher.subscribe(this, systemEvent);
-  eventDispatcher.subscribe(this, keyboardEvent);
+  p_eventDispatcher.reset(new EventDispatcher(p_videoManager.get()));
+  p_eventDispatcher->subscribe(this, systemEvent);
+  p_eventDispatcher->subscribe(this, keyboardEvent);
   logger.log("Events subscribed", Logger::CDEBUG);
   
-  VideoManager& videoManager = VideoManager::getInstance();
-  videoManager.initSystem(screenConfig);
-
   // initialise objects
-  ship.init();
-  map.init();
+ p_ship.reset(new Ship(p_videoManager.get()));
+  p_ship->init();
+  p_map.reset(new Map1(p_videoManager.get()));
+  p_map->init();
   
   //initialize keyboard map
   keyboard.keyMap[Keyboard::CAP_KEYUP].state = Keyboard::CAP_UNPRESSED;
@@ -50,36 +49,35 @@ void SpaceCombatGame::init() {
 
 void SpaceCombatGame::loop() {
   while(!quit){
-	EventDispatcher& eventDispatcher = EventDispatcher::getInstance();
-	eventDispatcher.getEvents();
-	if(eventDispatcher.hasEvents()){
-	  eventDispatcher.flushQueue();
+	p_eventDispatcher->getEvents();
+	if(p_eventDispatcher->hasEvents()){
+	  p_eventDispatcher->flushQueue();
 	}
 	timeStep.updateStep();
 	update();
 	render();
 	timeStep.renderStep();
   }
-  VideoManager::getInstance().shutdown();
+  p_videoManager->shutdown();
 }
 
 void SpaceCombatGame::update() {
   // update objects based on input state (keyboard)
   if(keyboard.keyMap[Keyboard::CAP_KEYLEFT] .state == Keyboard::CAP_PRESSED){
     Vector direction(-1.0, 0.0, 0.0);
-    ship.move(direction, timeStep.lastTimeStep);
+    p_ship->move(direction, timeStep.lastTimeStep);
   }
   else if(keyboard.keyMap[Keyboard::CAP_KEYRIGHT] .state == Keyboard::CAP_PRESSED){
     Vector direction(1.0, 0.0, 0.0);
-    ship.move(direction, timeStep.lastTimeStep);   
+    p_ship->move(direction, timeStep.lastTimeStep);   
   }
   else{
     Vector direction(0.0, 0.0, 0.0);
-    ship.move(direction, timeStep.lastTimeStep);
+    p_ship->move(direction, timeStep.lastTimeStep);
   }
 
 
-  map.update(timeStep.lastTimeStep);
+  p_map->update(timeStep.lastTimeStep);
 
   // check for collisions
   vector<CollisionEvent> collisions = getCollisions();
@@ -93,16 +91,16 @@ void SpaceCombatGame::update() {
 }
 
 void SpaceCombatGame::render() {
-  map.render(screenConfig.width, screenConfig.height);
-  ship.render();
-  VideoManager::getInstance().drawScreen();
+  p_map->render(screenConfig.width, screenConfig.height);
+  p_ship->render();
+  p_videoManager->drawScreen();
 }
 
 void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
   // exit when 'q' is pressed
   if ((event->type == SDL_KEYUP && ((SDL_KeyboardEvent*)event)->keysym.sym == SDLK_q) || event->type == SDL_QUIT){
 	quit = true;
-	Logger::getInstance().log("quitting. ", Logger::CDEBUG);
+	logger.log("quitting. ", Logger::CDEBUG);
 	return;
   }
   else if(event->type == SDL_KEYUP || event->type == SDL_KEYDOWN){
@@ -130,10 +128,10 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
 vector<CollisionEvent> SpaceCombatGame::getCollisions(){
   vector<CollisionEvent> collisions;
   // check for wall collision
-  CollisionType colType = detectMBRCollisionInterior(ship.boundingPolygon(), Rectangle(0, 0, screenConfig.width, screenConfig.height));
+  CollisionType colType = detectMBRCollisionInterior(p_ship->boundingPolygon(), Rectangle(0, 0, screenConfig.width, screenConfig.height));
   if(colType != COLLISION_NONE){
     CollisionEvent event;
-    event.object1 = &ship;
+    event.object1 = p_ship.get();
     event.object2 =nullptr;
     event.type = colType;
     event.class_ = COLLISION_WALL;

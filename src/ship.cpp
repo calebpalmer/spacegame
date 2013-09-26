@@ -1,22 +1,25 @@
 #include "ship.h"
 
 #include <string>
+#include <cassert>
 
 using namespace std;
 using namespace CapEngine;
 
-Ship::Ship() :  health(100), velocity(5) {
+Ship::Ship(VideoManager* videoManagerIn) :  health(100), velocity(5) {
+  assert(videoManagerIn != nullptr);
+  videoManager = videoManagerIn;
   position.x = 600;
   position.y = 800 - (HEIGHT * 2);
 }
 
 Ship::~Ship() {
-  VideoManager::getInstance().closeSurface(surface);
+  videoManager->closeSurface(surface);
 }
 
 void Ship::init(){
   string imageFile = "res/ship.png";
-  surface = VideoManager::getInstance().loadImage(imageFile);
+  surface = videoManager->loadImage(imageFile);
 }
 
 Rectangle Ship::boundingPolygon(){
@@ -30,7 +33,7 @@ Rectangle Ship::boundingPolygon(){
 
 void Ship::render(){
   Rectangle rect = boundingPolygon();
-  VideoManager::getInstance().drawSurface(rect.x, rect.y, surface);
+  videoManager->drawSurface(rect.x, rect.y, surface);
 }
 
 void Ship::move(Vector& direction, real timeStep){

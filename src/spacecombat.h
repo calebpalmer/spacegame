@@ -36,10 +36,13 @@ class SpaceCombatGame : IEventSubscriber{
 
  private:
   bool quit;
-  Ship ship;
-  Map1 map;
+  std::unique_ptr<Ship> p_ship;
+  std::unique_ptr<Map1> p_map;
   CapEngine::TimeStep timeStep;
   CapEngine::Keyboard keyboard;
+  std::unique_ptr<CapEngine::VideoManager> p_videoManager;
+  CapEngine::Logger logger;
+  std::unique_ptr<CapEngine::EventDispatcher> p_eventDispatcher;
 };
 
 #endif // SPACECOMBATGAME
