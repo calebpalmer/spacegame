@@ -1,0 +1,18 @@
+* DONE Segfault after redesigning CAPENGINE to remove singletons
+  CLOSED: [2013-09-25 Wed 20:56]
+Is VideoManager being inited before ship gets inited?
+** stacktrace
+ #0 0x00007ffff6b1ca00 in ?? () from /usr/lib/libSDL-1.2.so.0
+#1 <signal handler called>
+#2 0x00007ffff7bcf313 in CapEngine::Logger::log (this=0xffffffff, message="Loaded surface from file res/ship.png", level=CapEngine::Logger::CDEBUG) at logger.cpp:38
+#3 0x00007ffff7bbd48a in CapEngine::VideoManager::loadImage (this=0x60c090, filePath="res/ship.png") at VideoManager.cpp:53
+#4 0x0000000000406f90 in Ship::init (this=0x679d50) at ship.cpp:22
+#5 0x0000000000402f52 in SpaceCombatGame::init (this=0x7fffffffe0f0) at spacecombat.cpp:39
+#6 0x0000000000403977 in main () at spacecombat.cpp:146
+* Game Loop
+** current
+while true
+   get events
+   getTimeSinceLastUpdate
+   update(timeSinceLastUpdate)
+   render()
