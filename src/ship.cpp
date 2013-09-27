@@ -6,7 +6,7 @@
 using namespace std;
 using namespace CapEngine;
 
-Ship::Ship(VideoManager* videoManagerIn) :  health(100), velocity(5) {
+Ship::Ship(VideoManager* videoManagerIn) :  health(100), velocity(20) {
   assert(videoManagerIn != nullptr);
   videoManager = videoManagerIn;
   position.x = 600;

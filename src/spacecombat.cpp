@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
 
 #include "spacecombat.h"
 #include "map1.h"
@@ -48,15 +49,26 @@ void SpaceCombatGame::init() {
 }
 
 void SpaceCombatGame::loop() {
+  double previous = currentTime();
+  double lag = 0.0;
   while(!quit){
-	p_eventDispatcher->getEvents();
-	if(p_eventDispatcher->hasEvents()){
-	  p_eventDispatcher->flushQueue();
-	}
-	timeStep.updateStep();
-	update();
-	render();
-	timeStep.renderStep();
+    double current = currentTime();
+    double elapsed = current - previous;
+    previous = current;
+    lag += elapsed;
+    
+    //process input
+    p_eventDispatcher->getEvents();
+    if(p_eventDispatcher->hasEvents()){
+      p_eventDispatcher->flushQueue();
+    }
+    
+    while(lag >= MS_PER_UPDATE){
+      update();
+      lag -= MS_PER_UPDATE;
+    }
+    
+    render();
   }
   p_videoManager->shutdown();
 }
@@ -65,19 +77,19 @@ void SpaceCombatGame::update() {
   // update objects based on input state (keyboard)
   if(keyboard.keyMap[Keyboard::CAP_KEYLEFT] .state == Keyboard::CAP_PRESSED){
     Vector direction(-1.0, 0.0, 0.0);
-    p_ship->move(direction, timeStep.lastTimeStep);
+    p_ship->move(direction, MS_PER_UPDATE);
   }
   else if(keyboard.keyMap[Keyboard::CAP_KEYRIGHT] .state == Keyboard::CAP_PRESSED){
     Vector direction(1.0, 0.0, 0.0);
-    p_ship->move(direction, timeStep.lastTimeStep);   
+    p_ship->move(direction, MS_PER_UPDATE);   
   }
   else{
     Vector direction(0.0, 0.0, 0.0);
-    p_ship->move(direction, timeStep.lastTimeStep);
+    p_ship->move(direction, MS_PER_UPDATE);
   }
 
 
-  p_map->update(timeStep.lastTimeStep);
+  p_map->update(MS_PER_UPDATE);
 
   // check for collisions
   vector<CollisionEvent> collisions = getCollisions();

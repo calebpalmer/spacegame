@@ -13,7 +13,7 @@ void Map1::init(){
   width = 1200;
   height = 2400;
   y = height;
-  velocity = 5;
+  velocity = 200;
   surface = videoManager->loadImage("res/level1.png");
  }
 

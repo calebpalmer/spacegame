@@ -16,3 +16,7 @@ while true
    getTimeSinceLastUpdate
    update(timeSinceLastUpdate)
    render()
+* DONE update the game loop
+  CLOSED: [2013-09-26 Thu 20:42]
+** TODO after update of game loop, everything is going too slow
+** Does this game loop even work?

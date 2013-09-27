@@ -9,6 +9,8 @@
 
 #include <memory>
 
+#define MS_PER_UPDATE 33.33 // 30fps
+
 struct CollisionEvent{
   GameObject* object1;
   GameObject* object2;
