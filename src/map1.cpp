@@ -20,7 +20,7 @@ void Map1::init(){
  Map1::~Map1() {}
 
  void Map1::update(real timestep){
-   y -= velocity * (1.0f / timestep);
+   y -= velocity * (timestep / 1000.0);
    if( y < 0 ){
      y = height + y;
    }

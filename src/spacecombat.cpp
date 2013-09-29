@@ -3,6 +3,10 @@
 #include <iostream>
 #include <sstream>
 
+#ifdef UNIX
+#include <unistd.h>  // sleep
+#endif
+
 #include "spacecombat.h"
 #include "map1.h"
 
@@ -68,7 +72,7 @@ void SpaceCombatGame::loop() {
       lag -= MS_PER_UPDATE;
     }
     
-    render();
+    render(1.0);
   }
   p_videoManager->shutdown();
 }
@@ -102,7 +106,9 @@ void SpaceCombatGame::update() {
     }
 }
 
-void SpaceCombatGame::render() {
+void SpaceCombatGame::render(double frameFactor) {  
+  // framefactor is for just i've updated past the current frame, so render should interpolate the game objects based on this factor
+  // update has updated the game world time ahead of real time
   p_map->render(screenConfig.width, screenConfig.height);
   p_ship->render();
   p_videoManager->drawScreen();

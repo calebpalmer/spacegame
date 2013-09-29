@@ -18,5 +18,8 @@ while true
    render()
 * DONE update the game loop
   CLOSED: [2013-09-26 Thu 20:42]
-** TODO after update of game loop, everything is going too slow
+** DONE after update of game loop, everything is going too slow
+   CLOSED: [2013-09-29 Sun 18:28]
+The update functions of the entities were not converting the timestep to seconds properly.
+They were doing 1.0 / timestep instead of timestep / 1000.0
 ** Does this game loop even work?

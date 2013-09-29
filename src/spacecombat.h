@@ -9,7 +9,8 @@
 
 #include <memory>
 
-#define MS_PER_UPDATE 33.33 // 30fps
+#define MS_PER_UPDATE 16.67 // 60fps
+//#define MS_PER_UPDATE 33.33 // 30fps
 
 struct CollisionEvent{
   GameObject* object1;
@@ -32,7 +33,7 @@ class SpaceCombatGame : IEventSubscriber{
  
  private:
   void update();
-  void render();
+  void render(double frameFactor);
   void renderBackground();
   std::vector<CollisionEvent> getCollisions();
 

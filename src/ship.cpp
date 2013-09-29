@@ -2,11 +2,12 @@
 
 #include <string>
 #include <cassert>
+#include <sstream>
 
 using namespace std;
 using namespace CapEngine;
 
-Ship::Ship(VideoManager* videoManagerIn) :  health(100), velocity(20) {
+Ship::Ship(VideoManager* videoManagerIn) :  health(100), velocity(250) {
   assert(videoManagerIn != nullptr);
   videoManager = videoManagerIn;
   position.x = 600;
@@ -37,8 +38,11 @@ void Ship::render(){
 }
 
 void Ship::move(Vector& direction, real timeStep){
-  direction.scale(velocity);
-  position = position + direction;
+  direction.scale(static_cast<double>(velocity) * (timeStep / 1000.0));
+  //direction.scale(velocity);
+  Vector newPosition = position + direction;
+  
+  position = newPosition;
 }
 
 void Ship::handleCollision(CollisionType type, CollisionClass class_, GameObject* otherObject){
