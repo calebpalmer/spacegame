@@ -9,6 +9,7 @@
 
 #include "spacecombat.h"
 #include "map1.h"
+#include "locator.h"
 
 using namespace CapEngine;
 using namespace std;
@@ -39,9 +40,19 @@ void SpaceCombatGame::init() {
   p_eventDispatcher->subscribe(this, keyboardEvent);
   logger.log("Events subscribed", Logger::CDEBUG);
   
+  // setup locator
+  Locator::videoManager = p_videoManager.get();
+  Locator::logger = &logger;
+  Locator::keyboard = &keyboard;
+  Locator::soundPlayer = nullptr;
+
   // initialise objects
- p_ship.reset(new Ship(p_videoManager.get()));
-  p_ship->init();
+  upShip = makeShip();
+  Rectangle br = upShip->boundingPolygon();
+  real xPos = screenConfig.width / 2.0;
+  real yPos = screenConfig.height - br.height - 2.0;
+  Vector position(xPos, yPos, 0.0);
+  upShip->position = position;
   p_map.reset(new Map1(p_videoManager.get()));
   p_map->init();
   
@@ -50,6 +61,7 @@ void SpaceCombatGame::init() {
   keyboard.keyMap[Keyboard::CAP_KEYDOWN].state = Keyboard::CAP_UNPRESSED;
   keyboard.keyMap[Keyboard::CAP_KEYLEFT].state = Keyboard::CAP_UNPRESSED;
   keyboard.keyMap[Keyboard::CAP_KEYRIGHT].state = Keyboard::CAP_UNPRESSED;
+
 }
 
 void SpaceCombatGame::loop() {
@@ -79,38 +91,25 @@ void SpaceCombatGame::loop() {
 
 void SpaceCombatGame::update() {
   // update objects based on input state (keyboard)
-  if(keyboard.keyMap[Keyboard::CAP_KEYLEFT] .state == Keyboard::CAP_PRESSED){
-    Vector direction(-1.0, 0.0, 0.0);
-    p_ship->move(direction, MS_PER_UPDATE);
-  }
-  else if(keyboard.keyMap[Keyboard::CAP_KEYRIGHT] .state == Keyboard::CAP_PRESSED){
-    Vector direction(1.0, 0.0, 0.0);
-    p_ship->move(direction, MS_PER_UPDATE);   
-  }
-  else{
-    Vector direction(0.0, 0.0, 0.0);
-    p_ship->move(direction, MS_PER_UPDATE);
-  }
-
-
+  upShip->update(MS_PER_UPDATE);
   p_map->update(MS_PER_UPDATE);
 
   // check for collisions
-  vector<CollisionEvent> collisions = getCollisions();
-  while(collisions.size() >  0){
+  /*vector<CollisionEvent> collisions = getCollisions();
+    while(collisions.size() >  0){
     vector<CollisionEvent>::iterator iter;
     for(iter = collisions.begin(); iter != collisions.end(); iter++){
       iter->object1->handleCollision(iter->type, iter->class_, iter->object2);
     }
     collisions = getCollisions();
+    }*/
     }
-}
 
 void SpaceCombatGame::render(double frameFactor) {  
   // framefactor is for just i've updated past the current frame, so render should interpolate the game objects based on this factor
   // update has updated the game world time ahead of real time
   p_map->render(screenConfig.width, screenConfig.height);
-  p_ship->render();
+  upShip->render();
   p_videoManager->drawScreen();
 }
 
@@ -146,10 +145,10 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
 vector<CollisionEvent> SpaceCombatGame::getCollisions(){
   vector<CollisionEvent> collisions;
   // check for wall collision
-  CollisionType colType = detectMBRCollisionInterior(p_ship->boundingPolygon(), Rectangle(0, 0, screenConfig.width, screenConfig.height));
+  CollisionType colType = detectMBRCollisionInterior(upShip->boundingPolygon(), Rectangle(0, 0, screenConfig.width, screenConfig.height));
   if(colType != COLLISION_NONE){
     CollisionEvent event;
-    event.object1 = p_ship.get();
+    event.object1 = upShip.get();
     event.object2 =nullptr;
     event.type = colType;
     event.class_ = COLLISION_WALL;

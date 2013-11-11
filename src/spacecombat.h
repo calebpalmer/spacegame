@@ -39,7 +39,7 @@ class SpaceCombatGame : IEventSubscriber{
 
  private:
   bool quit;
-  std::unique_ptr<Ship> p_ship;
+  std::unique_ptr<GameObject> upShip;
   std::unique_ptr<Map1> p_map;
   CapEngine::TimeStep timeStep;
   CapEngine::Keyboard keyboard;

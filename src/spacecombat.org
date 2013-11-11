@@ -23,3 +23,9 @@ while true
 The update functions of the entities were not converting the timestep to seconds properly.
 They were doing 1.0 / timestep instead of timestep / 1000.0
 ** Does this game loop even work?
+* Basic Enemy Fighters
+* TODO Create Component system
+** TODO change ship to a component
+** TODO Do I model the map as a gameobject?
+* ship input component
+Right now the ship input component has a const velocity that it sets the position

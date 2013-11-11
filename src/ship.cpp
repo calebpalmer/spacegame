@@ -4,10 +4,15 @@
 #include <cassert>
 #include <sstream>
 
+#include "ship_input_component.h"
+#include "ship_graphics_component.h"
+#include "ship_physics_component.h"
+#include "locator.h"
+
 using namespace std;
 using namespace CapEngine;
 
-Ship::Ship(VideoManager* videoManagerIn) :  health(100), velocity(250) {
+/** Ship::Ship(VideoManager* videoManagerIn) :  health(100), velocity(250) {
   assert(videoManagerIn != nullptr);
   videoManager = videoManagerIn;
   position.x = 600;
@@ -58,4 +63,22 @@ void Ship::handleCollision(CollisionType type, CollisionClass class_, GameObject
       break;
     }
   }
+}
+
+*/
+
+
+unique_ptr<GameObject> makeShip(){
+  unique_ptr<GameObject> ship(new GameObject);
+
+  VideoManager* videoManager = Locator::videoManager;
+  
+  unique_ptr<InputComponent> uic(new ShipInputComponent());
+  unique_ptr<PhysicsComponent> upc(new ShipPhysicsComponent());
+  unique_ptr<GraphicsComponent> ugc(new ShipGraphicsComponent(videoManager));
+  ship->inputComponent.reset(uic.release());
+  ship->physicsComponent.reset(upc.release());
+  ship->graphicsComponent.reset(ugc.release());
+
+  return move(ship);
 }

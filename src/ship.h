@@ -2,11 +2,11 @@
 #define SHIP_H
 
 #include "CapEngine.h"
-#include "gun.h"
 #include "gameobject.h"
 
 #include <memory>
 
+/*
 #define WIDTH 32
 #define HEIGHT 32
 
@@ -30,6 +30,9 @@ class Ship : public GameObject{
   CapEngine::Surface* surface;
   CapEngine::Vector position;
 };
+*/
+
+std::unique_ptr<GameObject> makeShip();
 
 #endif // SHIP_H
 
