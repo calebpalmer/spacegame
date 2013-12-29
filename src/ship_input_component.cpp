@@ -6,6 +6,7 @@
 using namespace CapEngine;
 
 void ShipInputComponent::update(GameObject* object){
+
   Keyboard* keyboard = Locator::keyboard;
   Keyboard::KeyInfo leftInfo = keyboard->keyMap[Keyboard::CAP_KEYLEFT];
   Keyboard::KeyInfo rightInfo = keyboard->keyMap[Keyboard::CAP_KEYRIGHT];

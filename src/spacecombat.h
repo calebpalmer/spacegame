@@ -6,6 +6,7 @@
 #include "map.h"
 #include "map1.h"
 #include "gameobject.h"
+#include "world.h"
 
 #include <memory>
 
@@ -39,8 +40,8 @@ class SpaceCombatGame : IEventSubscriber{
 
  private:
   bool quit;
-  std::unique_ptr<GameObject> upShip;
-  std::unique_ptr<Map1> p_map;
+  World world;
+  std::unique_ptr<Map1> upMap;
   CapEngine::TimeStep timeStep;
   CapEngine::Keyboard keyboard;
   std::unique_ptr<CapEngine::VideoManager> p_videoManager;

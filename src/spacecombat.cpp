@@ -23,7 +23,7 @@ SpaceCombatGame::SpaceCombatGame() {
 }
 
 SpaceCombatGame::~SpaceCombatGame(){
-
+  
 }
 
 void SpaceCombatGame::init() {
@@ -47,14 +47,18 @@ void SpaceCombatGame::init() {
   Locator::soundPlayer = nullptr;
 
   // initialise objects
-  upShip = makeShip();
+
+  unique_ptr<GameObject> upShip= makeShip();
   Rectangle br = upShip->boundingPolygon();
   real xPos = screenConfig.width / 2.0;
   real yPos = screenConfig.height - br.height - 2.0;
   Vector position(xPos, yPos, 0.0);
   upShip->position = position;
-  p_map.reset(new Map1(p_videoManager.get()));
-  p_map->init();
+  world.addObject(*(upShip.release()));
+
+  upMap.reset(new Map1(p_videoManager.get()));
+  upMap->init();
+  world.currentMap = upMap.get();
   
   //initialize keyboard map
   keyboard.keyMap[Keyboard::CAP_KEYUP].state = Keyboard::CAP_UNPRESSED;
@@ -91,8 +95,10 @@ void SpaceCombatGame::loop() {
 
 void SpaceCombatGame::update() {
   // update objects based on input state (keyboard)
-  upShip->update(MS_PER_UPDATE);
-  p_map->update(MS_PER_UPDATE);
+ //upShip->update(MS_PER_UPDATE);
+  //upMap->update(MS_PER_UPDATE);
+  world.update(MS_PER_UPDATE);
+  world.currentMap->update(MS_PER_UPDATE);
 
   // check for collisions
   /*vector<CollisionEvent> collisions = getCollisions();
@@ -108,8 +114,12 @@ void SpaceCombatGame::update() {
 void SpaceCombatGame::render(double frameFactor) {  
   // framefactor is for just i've updated past the current frame, so render should interpolate the game objects based on this factor
   // update has updated the game world time ahead of real time
-  p_map->render(screenConfig.width, screenConfig.height);
-  upShip->render();
+  upMap->render(screenConfig.width, screenConfig.height);
+  vector<GameObject*>::iterator iter;
+  for(iter = world.gameObjects.begin(); iter != world.gameObjects.end(); iter++){
+    (*iter)->render();
+    }
+  //upShip->render();
   p_videoManager->drawScreen();
 }
 
@@ -144,16 +154,16 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
 
 vector<CollisionEvent> SpaceCombatGame::getCollisions(){
   vector<CollisionEvent> collisions;
-  // check for wall collision
-  CollisionType colType = detectMBRCollisionInterior(upShip->boundingPolygon(), Rectangle(0, 0, screenConfig.width, screenConfig.height));
-  if(colType != COLLISION_NONE){
-    CollisionEvent event;
-    event.object1 = upShip.get();
-    event.object2 =nullptr;
-    event.type = colType;
-    event.class_ = COLLISION_WALL;
-    collisions.push_back(event);
-  }
+  // // check for wall collision
+  // CollisionType colType = detectMBRCollisionInterior(upShip->boundingPolygon(), Rectangle(0, 0, screenConfig.width, screenConfig.height));
+  // if(colType != COLLISION_NONE){
+  //   CollisionEvent event;
+  //   event.object1 = upShip.get();
+  //   event.object2 =nullptr;
+  //   event.type = colType;
+  //   event.class_ = COLLISION_WALL;
+  //   collisions.push_back(event);
+  // }
   return collisions;
 }
 

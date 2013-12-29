@@ -4,10 +4,11 @@
 #include "gameobject.h"
 
 class ShipInputComponent : public InputComponent {
+
   virtual void update(GameObject* object);
 
  private:
-    const double VELOCITY = 60.0;
+  const double VELOCITY = 200.0;
 };
 
 #endif // SHIP_INPUT_COMPONENT_H
