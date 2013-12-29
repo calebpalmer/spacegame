@@ -1,16 +1,22 @@
 (require 'compile)
 
-(defun proj-clean ()
+(defun myproj-clean ()
   (interactive)
   (set (make-local-variable 'compile-command) "make clean; make extract")
   (call-interactively 'compile)
 )
 
-(defun proj-compile ()
+(defun myproj-compile ()
   (interactive)
   (set (make-local-variable 'compile-command) "make -k")  
   (call-interactively 'compile)
 )
 
-(global-set-key [f12] 'proj-compile)
-(global-set-key [f11] 'proj-clean)
+(defun myproj-tags ()
+  (interactive)
+  (shell-command "make tags")
+)
+
+(global-set-key [f12] 'myproj-compile)
+(global-set-key [f11] 'myproj-clean)
+(global-set-key (kbd "C-c C-b t") 'myproj-tags)
