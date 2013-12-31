@@ -13,13 +13,6 @@
 #define MS_PER_UPDATE 16.67 // 60fps
 //#define MS_PER_UPDATE 33.33 // 30fps
 
-struct CollisionEvent{
-  GameObject* object1;
-  GameObject* object2;
-  CapEngine::CollisionType type;
-  CapEngine::CollisionClass class_;
-};
-
 class SpaceCombatGame : IEventSubscriber{
 
  public:

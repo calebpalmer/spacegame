@@ -7,6 +7,14 @@
 
 class GameObject;
 
+class CollisionEvent{
+ public:
+  GameObject* object1;
+  GameObject* object2;
+  CapEngine::CollisionType type;
+  CapEngine::CollisionClass class_;
+};
+
 class PhysicsComponent {
  public:
   virtual void update(GameObject* object, double timestep) = 0;

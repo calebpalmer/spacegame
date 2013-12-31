@@ -9,6 +9,9 @@ class Map{
   virtual void update(CapEngine::real timestep) = 0;
   virtual void render(int screenWidth, int screenHeight) = 0;
   virtual void init() = 0;
+ public:
+  int width;
+  int height;
 };
 
 #endif //MAP_H

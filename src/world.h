@@ -7,14 +7,16 @@
 #include "map.h"
 
 class World{
+ private:
+  std::vector<CollisionEvent> getCollisions(GameObject& object);
+  void handleCollisions(GameObject& object);
  public:
   ~World();
   void update(double ms);
   void addObject(GameObject& object);
   void removeObject(GameObject& object);
-  
-					       
- public:
+
+   public:
     Map* currentMap;
     std::vector<GameObject*> gameObjects;
 };

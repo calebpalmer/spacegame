@@ -21,10 +21,12 @@ void ShipPhysicsComponent::handleCollision(GameObject* object, CapEngine::Collis
   if(class_ == COLLISION_WALL){
     switch(type){
     case COLLISION_LEFT:
-      object->position = object->position + object->velocity;
+      //object->position = object->position + object->velocity;
+      object->velocity.x = 0.0;
       break;
       case COLLISION_RIGHT:
-	object->position = object->position + object->velocity;
+	//object->position = object->position + object->velocity;
+	object->velocity.x = 0.0;
 	break;
     default:
       break;

@@ -17,6 +17,21 @@
   (shell-command "make tags")
 )
 
+(defun myproj-launch ()
+  (interactive)
+  (shell-command "sh ./spacecombat.sh")
+)
+
+(defun myproj-debug ()
+  (interactive)
+  ;; (set (make-local-variable 'gdb-command-name) "gdb -i=mi spacecombat -d ../../github/capengine")
+  (defvar gud-gdb-command-name "gdb -i=mi -d ../../github/capengine spacecombat")
+  (setq gud-gdb-command-name "gdb -i=mi -d ../../github/capengine spacecombat")
+  (call-interactively 'gdb)
+)
+
 (global-set-key [f12] 'myproj-compile)
 (global-set-key [f11] 'myproj-clean)
-(global-set-key (kbd "C-c C-b t") 'myproj-tags)
+(global-set-key [f10] 'myproj-debug)
+(global-set-key (kbd "C-c C-l t") 'myproj-tags)
+(global-set-key (kbd "C-c C-l l") 'myproj-launch)

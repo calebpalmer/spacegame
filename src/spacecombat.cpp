@@ -97,8 +97,8 @@ void SpaceCombatGame::update() {
   // update objects based on input state (keyboard)
  //upShip->update(MS_PER_UPDATE);
   //upMap->update(MS_PER_UPDATE);
-  world.update(MS_PER_UPDATE);
   world.currentMap->update(MS_PER_UPDATE);
+  world.update(MS_PER_UPDATE);\
 
   // check for collisions
   /*vector<CollisionEvent> collisions = getCollisions();

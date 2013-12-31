@@ -17,10 +17,11 @@ class Map1 : public Map {
   CapEngine::Surface* surface;
   float y;
   float velocity;  // pixels per second
+
+ public:
   int width;
   int height;
-
-
+  
 };
 
 #endif //MAP1_H
