@@ -8,7 +8,7 @@ using namespace CapEngine;
    object->position = object->position + displacement;
 }
 
-Rectangle ShipPhysicsComponent::boundingPolygon(GameObject* object){
+Rectangle ShipPhysicsComponent::boundingPolygon(const GameObject* object) const {
   Rectangle rect;
   rect.x = object->position.x - (this->WIDTH / 2.0);
   rect.y = object->position.y - (this->HEIGHT / 2.0);

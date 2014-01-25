@@ -34,9 +34,9 @@ void World::removeObject(GameObject& object){
 void World::update(double ms){
   vector<GameObject*>::iterator iter;
   for(iter = gameObjects.begin(); iter != gameObjects.end(); iter++){
-    (*iter)->update(ms);
-    handleCollisions(**iter);
-
+    unique_ptr<GameObject> newObj = (*iter)->update(ms);
+    handleCollisions(*newObj);
+    *iter = newObj.release();
   }
 }
 
