@@ -24,8 +24,8 @@ Rectangle GameObject::boundingPolygon() const {
 }
 
 
-void GameObject::handleCollision(CapEngine::CollisionType type, CapEngine::CollisionClass class_, GameObject* otherObject){
-  physicsComponent->handleCollision(this, type, class_, otherObject);
+bool GameObject::handleCollision(CapEngine::CollisionType type, CapEngine::CollisionClass class_, GameObject* otherObject){
+  return physicsComponent->handleCollision(this, type, class_, otherObject);
 }
 
 GameObject& GameObject::operator=(const GameObject& object){

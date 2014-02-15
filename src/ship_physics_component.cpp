@@ -17,21 +17,10 @@ Rectangle ShipPhysicsComponent::boundingPolygon(const GameObject* object) const 
   return rect;
 }
 
-void ShipPhysicsComponent::handleCollision(GameObject* object, CapEngine::CollisionType type, CapEngine::CollisionClass class_, GameObject* otherObject){
+bool ShipPhysicsComponent::handleCollision(GameObject* object, CapEngine::CollisionType type, CapEngine::CollisionClass class_, GameObject* otherObject){
   if(class_ == COLLISION_WALL){
-    switch(type){
-    case COLLISION_LEFT:
-      //object->position = object->position + object->velocity;
-      object->velocity.x = 0.0;
-      break;
-      case COLLISION_RIGHT:
-	//object->position = object->position + object->velocity;
-	object->velocity.x = 0.0;
-	break;
-    default:
-      break;
-    }
+    return false;
   }
-  
+  return false;
 }
 

@@ -7,7 +7,7 @@ class ShipPhysicsComponent : public PhysicsComponent {
  public:
   virtual void update(GameObject* object, double timestep);
   virtual CapEngine::Rectangle  boundingPolygon(const GameObject* object) const;
-  virtual void handleCollision(GameObject* object, CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
+  virtual bool handleCollision(GameObject* object, CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
   
  public:
   const int WIDTH = 32;

@@ -53,4 +53,10 @@ void Map1::init(){
   }
 }
 
+int Map1::getWidth(){
+  return width;
+}
 
+int Map1::getHeight(){
+  return height;
+}

@@ -1,6 +1,8 @@
 #include "world.h"
 #include "CapEngine.h"
 
+#include <iostream>
+
 using namespace std;
 using namespace CapEngine;
 
@@ -33,17 +35,68 @@ void World::removeObject(GameObject& object){
 
 void World::update(double ms){
   vector<GameObject*>::iterator iter;
-  for(iter = gameObjects.begin(); iter != gameObjects.end(); iter++){
-    unique_ptr<GameObject> newObj = (*iter)->update(ms);
-    handleCollisions(*newObj);
-    *iter = newObj.release();
-  }
+  /**
+     for each game object
+         get collisions
+	 for each collision
+	     check to see if object can handle it
+	     if object can handle it
+	         detect collisions again
+		 loop
+	     else
+	         world handles collision
+		 if rollback to original object is needed
+		     detect collisions again
+     
+
+   **/
+  for(iter = gameObjects.begin(); iter != gameObjects.end(); iter++){ 
+    unique_ptr<GameObject> newObject = (*iter)->update(ms);
+    vector<CollisionEvent> collisions;
+    collisions = getCollisions(*newObject);
+    if(collisions.size() > 0){
+      while(collisions.size() >  0){
+#ifdef DEBUG
+        cout << collisions.size() << " collisions detected. " << endl;
+#endif
+        bool handled = false;
+        bool collisionsRecomputed = false;
+        auto collisionIter = collisions.begin();
+        while(collisionIter != collisions.end() && !collisionsRecomputed) {
+    handled = newObject->handleCollision(collisionIter->type, collisionIter->class_, collisionIter->object2);
+    if(handled){
+      *iter = newObject.release();
+      collisions = getCollisions(**iter);
+      collisionsRecomputed = true;
+    }
+    else{
+      bool rollback = false;
+      //// if collision event causes rollback
+      if(collisionIter->class_ == COLLISION_WALL){
+        rollback=true;
+      }
+      
+      if(rollback){
+        // leave *iter at the current object
+        collisions = getCollisions(**iter);
+        collisionsRecomputed = true;
+      }
+    }
+    collisionIter++;
+        }  // for each collision
+      }  // while collisions.size() != 0 
+    } 
+
+    else{
+      *iter = newObject.release();
+    }
+  } 
 }
 
 vector<CollisionEvent> World::getCollisions(GameObject& object){
   vector<CollisionEvent> collisions;
   // // check for map collision
-  CollisionType colType = detectMBRCollisionInterior(object.boundingPolygon(), Rectangle(0, 0, currentMap->width, currentMap->height));
+  CollisionType colType = detectMBRCollisionInterior(object.boundingPolygon(), Rectangle(0, 0, currentMap->getWidth(), currentMap->getHeight()));
   if(colType != COLLISION_NONE){
     CollisionEvent event;
     event.object1 = &object;
@@ -51,20 +104,19 @@ vector<CollisionEvent> World::getCollisions(GameObject& object){
     event.type = colType;
     event.class_ = COLLISION_WALL;
     collisions.push_back(event);
+#ifdef DEBUG
+	cout << "collision added: type: " << (event.class_ == COLLISION_WALL ? "wall collision" : "other") << endl;
+	if(event.class_ == COLLISION_WALL){
+	  cout << "object MBR: (" << object.boundingPolygon().x << "," << object.boundingPolygon().y << ") x (" << object.boundingPolygon().width
+	       << "," << object.boundingPolygon().height << ")" << endl;
+	  cout << "Map MBR: (" << 0 << "," << 0 << ") x (" << currentMap->width
+	       << "," << currentMap->height << ")" << endl;
+	}
+#endif
+    
   }
   
   //check for inter-object collisions
-  return collisions;  
-}
 
-void World::handleCollisions(GameObject& object){
-  vector<CollisionEvent> collisions;
-  collisions = getCollisions(object);
-  if(collisions.size() != 0){
-    vector<CollisionEvent>::iterator collisionIter;
-    // for each collision
-    for(collisionIter = collisions.begin(); collisionIter != collisions.end(); collisionIter++){
-      object.handleCollision(collisionIter->type, collisionIter->class_, collisionIter->object2);
-    }
-  }
+  return collisions;  
 }

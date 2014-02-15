@@ -19,7 +19,7 @@ class PhysicsComponent {
  public:
   virtual void update(GameObject* object, double timestep) = 0;
   virtual CapEngine::Rectangle boundingPolygon(const GameObject* object) const = 0;
-  virtual void handleCollision(GameObject* object, CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject) = 0;
+  virtual bool handleCollision(GameObject* object, CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject) = 0;
 
 };
 
@@ -46,7 +46,7 @@ class GameObject{
   void render();
   std::unique_ptr<GameObject> update(double ms) const;
   CapEngine::Rectangle boundingPolygon() const;
-  void handleCollision(CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
+  bool handleCollision(CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
 
  public:
   std::shared_ptr<InputComponent> inputComponent;

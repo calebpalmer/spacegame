@@ -11,6 +11,8 @@ class Map1 : public Map {
   void update(CapEngine::real timestep);
   void render(int screenWidth, int screenHeight);
   void init();
+  int getWidth();
+  int getHeight();
 
  private:
   CapEngine::VideoManager* videoManager;

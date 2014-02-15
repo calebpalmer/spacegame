@@ -9,7 +9,6 @@
 class World{
  private:
   std::vector<CollisionEvent> getCollisions(GameObject& object);
-  void handleCollisions(GameObject& object);
  public:
   ~World();
   void update(double ms);
