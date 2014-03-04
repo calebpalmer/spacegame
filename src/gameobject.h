@@ -35,13 +35,20 @@ class InputComponent {
 
 };
 
+class CustomComponent {
+ public:
+  virtual void update(GameObject* object) = 0;
+  virtual CustomComponent* clone() const = 0;
+
+};
+
 class GameObject{
  private:
   GameObject(const GameObject&);
 
  public:
   GameObject() {};
-  ~GameObject() {};
+  ~GameObject();
   GameObject& operator=(const GameObject& src);
   void render();
   std::unique_ptr<GameObject> update(double ms) const;
@@ -52,6 +59,7 @@ class GameObject{
   std::shared_ptr<InputComponent> inputComponent;
   std::shared_ptr<PhysicsComponent> physicsComponent;
   std::shared_ptr<GraphicsComponent> graphicsComponent;
+  std::shared_ptr<CustomComponent> customComponent;
 
   CapEngine::Vector position;
   CapEngine::Vector orientation;

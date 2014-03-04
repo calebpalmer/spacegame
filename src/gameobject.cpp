@@ -3,6 +3,10 @@
 using namespace CapEngine;
 using namespace std;
 
+GameObject::~GameObject(){
+
+}
+
 void GameObject::render(){
   graphicsComponent->render(this);
 }
@@ -14,7 +18,6 @@ unique_ptr<GameObject> GameObject::update(double ms) const{
 
   newObj->inputComponent->update(newObj.get());
   newObj->physicsComponent->update(newObj.get(), ms);
-  // do collision detection to determine whether the new game object should be kept
 
   return move(newObj);
 }
@@ -39,6 +42,7 @@ GameObject& GameObject::operator=(const GameObject& object){
     inputComponent = object.inputComponent;
     physicsComponent = object.physicsComponent;
     graphicsComponent = object.graphicsComponent;
+    customComponent.reset(object.customComponent->clone());
   }
   return *this;
 }

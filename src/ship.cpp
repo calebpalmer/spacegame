@@ -7,6 +7,7 @@
 #include "ship_input_component.h"
 #include "ship_graphics_component.h"
 #include "ship_physics_component.h"
+#include "ship_custom_component.h"
 #include "locator.h"
 
 using namespace std;
@@ -76,9 +77,11 @@ unique_ptr<GameObject> makeShip(){
   unique_ptr<InputComponent> uic(new ShipInputComponent());
   unique_ptr<PhysicsComponent> upc(new ShipPhysicsComponent());
   unique_ptr<GraphicsComponent> ugc(new ShipGraphicsComponent(videoManager));
+  unique_ptr<CustomComponent> ucc(new ShipCustomComponent());
   ship->inputComponent.reset(uic.release());
   ship->physicsComponent.reset(upc.release());
   ship->graphicsComponent.reset(ugc.release());
+  ship->customComponent.reset(ucc.release());
 
   return move(ship);
 }

@@ -48,7 +48,7 @@ void SpaceCombatGame::init() {
 
   // initialise objects
 
-  unique_ptr<GameObject> upShip= makeShip();
+  unique_ptr<GameObject> upShip = makeShip();
   Rectangle br = upShip->boundingPolygon();
   real xPos = screenConfig.width / 2.0;
   real yPos = screenConfig.height - br.height - 2.0;
