@@ -45,6 +45,7 @@ void SpaceCombatGame::init() {
   Locator::logger = &logger;
   Locator::keyboard = &keyboard;
   Locator::soundPlayer = nullptr;
+  Locator::world = &(this->world);
 
   // initialise objects
 

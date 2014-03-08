@@ -4,3 +4,4 @@ CapEngine::VideoManager* Locator::videoManager = nullptr;
 CapEngine::Logger* Locator::logger = nullptr;
 CapEngine::SoundPlayer* Locator::soundPlayer = nullptr;
 CapEngine::Keyboard* Locator::keyboard = nullptr;
+World* Locator::world = nullptr;
