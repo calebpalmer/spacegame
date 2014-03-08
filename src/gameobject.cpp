@@ -18,6 +18,7 @@ unique_ptr<GameObject> GameObject::update(double ms) const{
 
   newObj->inputComponent->update(newObj.get());
   newObj->physicsComponent->update(newObj.get(), ms);
+  newObj->customComponent->update(newObj.get());
 
   return move(newObj);
 }
