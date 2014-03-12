@@ -3,13 +3,15 @@
 
 #include "gameobject.h"
 
+#include <memory>
+
 class Gun {
  public:
-  virtual ~Gun() = 0;
+  virtual ~Gun() {};
+  //virtual  Gun& operator=(const Gun& src);
+  virtual std::unique_ptr<Gun> clone() const = 0;
   virtual void fire() = 0;
-  virtual int fireRate() = 0;
   virtual int ammoRemaining() = 0;
-  virtual int cooldownTime() = 0;
 };
 
 #endif // GUN_H

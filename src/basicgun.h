@@ -6,17 +6,20 @@
 class BasicGun : public Gun {
  public:
   BasicGun();
-  ~BasicGun() = {}
+  BasicGun(const BasicGun&);
+  BasicGun& operator=(const BasicGun& src);
+  ~BasicGun() {}
+  std::unique_ptr<Gun> clone() const;
+
   // Gun virtual functions
   void fire();
-  int fireRate() ;
   int ammoRemaining() ;
-  int cooldownTime() ;
+
  private:
   // Some kind of abstract bullet factory is needed
   int ammunition;
-  int cooldown;
+  int cooldown; // time in ms between shots fired
   
-}
+};
 
 #endif //BASICGUN_H
