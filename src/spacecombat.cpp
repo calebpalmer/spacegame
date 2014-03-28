@@ -146,6 +146,9 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
     case SDLK_RIGHT:
       keyboard.keyMap[Keyboard::CAP_KEYRIGHT].state = (event->type == SDL_KEYUP ? Keyboard::CAP_UNPRESSED : Keyboard::CAP_PRESSED);
       break;
+    case SDLK_SPACE:
+      keyboard.keyMap[Keyboard::CAP_SPACE].state = (event->type == SDL_KEYUP ? Keyboard::CAP_UNPRESSED : Keyboard::CAP_PRESSED);
+      break;
     default:
       break;
     }

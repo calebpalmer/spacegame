@@ -1,10 +1,21 @@
 #include "basicgun.h"
 
+#include "CapEngine.h"
+#include "locator.h"
+#include "world.h"
+#include "bullet_physics_component.h"
+#include "bullet_graphics_component.h"
+
+#include <memory>
+#include <iostream>
+
 using namespace std;
+using namespace CapEngine;
 
 BasicGun::BasicGun() {
   ammunition = -1;  // unlimited
-  cooldown = 500; // ms
+  lastFire = -1;
+  cooldown = 300; // ms
 }
 
 BasicGun::BasicGun(const BasicGun& src){
@@ -13,8 +24,13 @@ BasicGun::BasicGun(const BasicGun& src){
 }
 
 unique_ptr<Gun> BasicGun::clone() const {
-  unique_ptr<Gun> newGun(new BasicGun(*this));
-  return std::move(newGun);
+  unique_ptr<BasicGun> newGun(new BasicGun());
+  newGun->ammunition = ammunition;
+  newGun->cooldown = cooldown;
+  newGun->lastFire = lastFire;
+  
+  unique_ptr<Gun> retGun(newGun.release());
+  return std::move(retGun);
 }
 
 BasicGun& BasicGun::operator=(const BasicGun& src){
@@ -26,9 +42,38 @@ BasicGun& BasicGun::operator=(const BasicGun& src){
 }
 
 
-void BasicGun::fire() {
+void BasicGun::fire(int x, int y) {
   // make sure cooltime period has elapsed
-  // unleash bullet in gameworld
+  double current = currentTime();
+  if((lastFire == -1 || (current - lastFire >= cooldown)) 
+     && (ammunition != 0)) {
+    // unleash bullet in gameworld
+    lastFire = current; 
+
+    unique_ptr<GameObject> bullet(new GameObject);
+
+    bullet->position.x = x;
+    bullet->position.y = y;
+    bullet->position.z = 0.0;
+
+    bullet->velocity.x = 0.0;
+    bullet->velocity.y = -200.0;
+    bullet->velocity.z = 0;
+
+    VideoManager* videoManager = Locator::videoManager;
+    unique_ptr<PhysicsComponent> upc(new BulletPhysicsComponent());
+    unique_ptr<GraphicsComponent> ugc(new BulletGraphicsComponent(videoManager));
+
+    bullet->physicsComponent.reset(upc.release());
+    bullet->graphicsComponent.reset(ugc.release());
+    bullet->objectType = GameObject::Projectile;
+
+#ifdef DEBUG
+    std::cout << "Fire!!" << std::endl;
+#endif
+    GameObject *p_bullet = bullet.release();
+    Locator::world->addObject(*p_bullet);
+  }
 }
 
 int BasicGun::ammoRemaining() {

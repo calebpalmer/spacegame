@@ -83,5 +83,7 @@ unique_ptr<GameObject> makeShip(){
   ship->graphicsComponent.reset(ugc.release());
   ship->customComponent.reset(ucc.release());
 
+  ship->objectType = GameObject::PlayerShip;
+
   return move(ship);
 }

@@ -12,13 +12,14 @@ class BasicGun : public Gun {
   std::unique_ptr<Gun> clone() const;
 
   // Gun virtual functions
-  void fire();
+  void fire(int x, int y);
   int ammoRemaining() ;
 
  private:
   // Some kind of abstract bullet factory is needed
   int ammunition;
-  int cooldown; // time in ms between shots fired
+  double cooldown; // time in ms between shots fired
+  double lastFire;
   
 };
 

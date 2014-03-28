@@ -43,10 +43,18 @@ class CustomComponent {
 };
 
 class GameObject{
+
  private:
   GameObject(const GameObject&);
 
  public:
+  enum ObjectType {
+    InvalidObject = 0,
+    PlayerShip,
+    EnemyShip,
+    Projectile
+  };
+
   GameObject() {};
   ~GameObject();
   GameObject& operator=(const GameObject& src);
@@ -54,6 +62,7 @@ class GameObject{
   std::unique_ptr<GameObject> update(double ms) const;
   CapEngine::Rectangle boundingPolygon() const;
   bool handleCollision(CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
+  std::unique_ptr<GameObject> clone() const;
 
  public:
   std::shared_ptr<InputComponent> inputComponent;
@@ -64,6 +73,8 @@ class GameObject{
   CapEngine::Vector position;
   CapEngine::Vector orientation;
   CapEngine::Vector velocity;
+
+  ObjectType objectType;
 };
 
 #endif // GAMEOBJECT_H
