@@ -5,6 +5,8 @@
 #include "world.h"
 #include "bullet_physics_component.h"
 #include "bullet_graphics_component.h"
+#include "null_input_component.h"
+#include "null_custom_component.h"
 
 #include <memory>
 #include <iostream>
@@ -63,9 +65,13 @@ void BasicGun::fire(int x, int y) {
     VideoManager* videoManager = Locator::videoManager;
     unique_ptr<PhysicsComponent> upc(new BulletPhysicsComponent());
     unique_ptr<GraphicsComponent> ugc(new BulletGraphicsComponent(videoManager));
+    unique_ptr<InputComponent> uic(new NullInputComponent);
+    unique_ptr<CustomComponent> ucc(new NullCustomComponent);
 
     bullet->physicsComponent.reset(upc.release());
     bullet->graphicsComponent.reset(ugc.release());
+    bullet->inputComponent.reset(uic.release());
+    bullet->customComponent.reset(ucc.release());
     bullet->objectType = GameObject::Projectile;
 
 #ifdef DEBUG
