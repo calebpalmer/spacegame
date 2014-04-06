@@ -39,12 +39,15 @@ void SpaceCombatGame::init() {
   p_eventDispatcher->subscribe(this, systemEvent);
   p_eventDispatcher->subscribe(this, keyboardEvent);
   logger.log("Events subscribed", Logger::CDEBUG);
+
+  SoundPlayer& soundPlayer = SoundPlayer::getSoundPlayer();
+  soundPlayer.setState(UNPAUSE);
   
   // setup locator
   Locator::videoManager = p_videoManager.get();
   Locator::logger = &logger;
   Locator::keyboard = &keyboard;
-  Locator::soundPlayer = nullptr;
+  Locator::soundPlayer = &soundPlayer;
   Locator::world = &(this->world);
 
   // initialise objects

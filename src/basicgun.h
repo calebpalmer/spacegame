@@ -3,6 +3,10 @@
 
 #include "gun.h"
 
+#include <string>
+
+#include "CapEngine.h"
+
 class BasicGun : public Gun {
  public:
   BasicGun();
@@ -20,7 +24,10 @@ class BasicGun : public Gun {
   int ammunition;
   double cooldown; // time in ms between shots fired
   double lastFire;
-  
+
+  static CapEngine::PCM* pShotSound;
+  const std::string shotSoundPath = "res/basicshot.wav";
+
 };
 
 #endif //BASICGUN_H

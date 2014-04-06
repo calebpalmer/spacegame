@@ -14,6 +14,8 @@
 using namespace std;
 using namespace CapEngine;
 
+PCM* BasicGun::pShotSound = nullptr;
+
 BasicGun::BasicGun() {
   ammunition = -1;  // unlimited
   lastFire = -1;
@@ -79,6 +81,15 @@ void BasicGun::fire(int x, int y) {
 #endif
     GameObject *p_bullet = bullet.release();
     Locator::world->addObject(*p_bullet);
+    
+    // create sound effect
+    if(pShotSound == nullptr){
+      unique_ptr<PCM> upShotSound(new PCM(shotSoundPath));
+      pShotSound = upShotSound.release();
+    }
+    unique_ptr<PCM> sentSound(new PCM(*pShotSound));
+    Locator::soundPlayer->addSound(sentSound.release());
+    
   }
 }
 

@@ -14,22 +14,22 @@ void GameObject::render(){
 }
 
 unique_ptr<GameObject> GameObject::update(double ms) const{
-#ifdef DEBUG
-  switch(objectType){
-  case Projectile:
-    cout << "Updating Projectile" << endl;
-    break;
-  case PlayerShip:
-    cout << "Updating Player" << endl;
-    break;
-  case EnemyShip:
-    cout << "Updating Enemy ship " << endl;
-    break;
-  default:
-    cout << "Updating Unknown object " << endl;
-    break;    
-  }
-#endif
+// #ifdef DEBUG
+//   switch(objectType){
+//   case Projectile:
+//     cout << "Updating Projectile" << endl;
+//     break;
+//   case PlayerShip:
+//     cout << "Updating Player" << endl;
+//     break;
+//   case EnemyShip:
+//     cout << "Updating Enemy ship " << endl;
+//     break;
+//   default:
+//     cout << "Updating Unknown object " << endl;
+//     break;    
+//   }
+// #endif
   // clone new game object and pas to updates
   //  unique_ptr<GameObject> newObj(new GameObject(*this));
   unique_ptr<GameObject> newObj = this->clone();
