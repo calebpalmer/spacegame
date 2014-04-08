@@ -33,6 +33,7 @@ class SpaceCombatGame : IEventSubscriber{
 
  private:
   bool quit;
+  bool showFPS;
   World world;
   std::unique_ptr<Map1> upMap;
   CapEngine::TimeStep timeStep;

@@ -14,7 +14,7 @@
 using namespace CapEngine;
 using namespace std;
 
-SpaceCombatGame::SpaceCombatGame() {
+SpaceCombatGame::SpaceCombatGame() : showFPS(false) {
   screenConfig.width = 1200;
   screenConfig.height = 800;
   screenConfig.pDepth = 32;
@@ -154,6 +154,26 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
       break;
     default:
       break;
+    }
+    // check to see if fps should be shown
+    if(event->type == SDL_KEYUP){
+      SDLKey ksym = ((SDL_KeyboardEvent*)event)->keysym.sym;
+      if(ksym == SDLK_TAB){
+	if(showFPS == true){
+	  showFPS = false;
+	  p_videoManager->displayFPS(false);
+	}
+	else{
+	  showFPS = true;
+	  ostringstream ttfStream;
+	  ttfStream << getCurrentDir() << "/res/tahoma.ttf";
+	  Uint8 r = 255;
+	  Uint8 g = 255;
+	  Uint8 b = 255;
+	  p_videoManager->displayFPS(true, ttfStream.str(), r, g, b);
+	}
+
+      }
     }
   }
   
