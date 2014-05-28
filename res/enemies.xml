@@ -1,0 +1,9 @@
+<enemys>
+
+  <enemy id="1">
+    <image>res/enemy1.png</image>
+    <gun>BasicGun</gun>
+    <ai>stationary</ai>
+  </enemy>
+
+</enemys>
