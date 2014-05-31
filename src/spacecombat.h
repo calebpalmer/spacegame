@@ -41,6 +41,7 @@ class SpaceCombatGame : IEventSubscriber{
   std::unique_ptr<CapEngine::VideoManager> p_videoManager;
   CapEngine::Logger logger;
   std::unique_ptr<CapEngine::EventDispatcher> p_eventDispatcher;
+  const std::string assetFilePath = "res/assets.xml";
 };
 
 #endif // SPACECOMBATGAME

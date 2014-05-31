@@ -1,4 +1,3 @@
-
 PLATFORM=UNIX
 CAPENGINEPATH=../../github/capengine
 LOGLEVEL=Logger::CDEBUG
@@ -6,8 +5,8 @@ CC=g++
 CPP=g++
 INCLUDE=./src
 INCLUDEDIRS=-I$(CAPENGINEPATH)
-CFLAGS= -g -Wall -D$(PLATFORM) -DDEBUG -DLOGLEVEL=$(LOGLEVEL) -std=c++0x $(INCLUDEDIRS) `sdl-config --cflags`
-LIBS=
+CFLAGS= -g -Wall -D$(PLATFORM) -DDEBUG -DLOGLEVEL=$(LOGLEVEL) -std=c++0x $(INCLUDEDIRS) `sdl-config --cflags` `xml2-config --cflags`
+LIBS=`sdl-config --cflags --libs` `xml2-config --libs` -lSDL_image -lboost_system -lboost_filesystem
 #CFLAGS= -O3 -D$(PLATFORM) -DDEBUG
 
 objects = spacecombat.o ship.o map1.o gameobject.o locator.o ship_input_component.o ship_physics_component.o ship_graphics_component.o ship_custom_component.o world.o basicgun.o \

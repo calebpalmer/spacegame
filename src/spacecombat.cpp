@@ -31,6 +31,7 @@ void SpaceCombatGame::init() {
   setCurrentDir("../");
   logger.log("current directory is set to " + getCurrentDir(), Logger::CDEBUG);
 
+  // Video
   p_videoManager.reset(new VideoManager());
   p_videoManager->initSystem(screenConfig);
 
@@ -40,8 +41,12 @@ void SpaceCombatGame::init() {
   p_eventDispatcher->subscribe(this, keyboardEvent);
   logger.log("Events subscribed", Logger::CDEBUG);
 
+  // Sound
   SoundPlayer& soundPlayer = SoundPlayer::getSoundPlayer();
   soundPlayer.setState(UNPAUSE);
+
+  // AssetManager
+  unique_ptr<AssetManager> upAssetManager(new AssetManager(*(p_videoManager.get()), soundPlayer, assetFilePath));
   
   // setup locator
   Locator::videoManager = p_videoManager.get();
@@ -49,9 +54,9 @@ void SpaceCombatGame::init() {
   Locator::keyboard = &keyboard;
   Locator::soundPlayer = &soundPlayer;
   Locator::world = &(this->world);
+  Locator::assetManager = upAssetManager.release();
 
-  // initialise objects
-
+  // initialise game objects
   unique_ptr<GameObject> upShip = makeShip();
   Rectangle br = upShip->boundingPolygon();
   real xPos = screenConfig.width / 2.0;
