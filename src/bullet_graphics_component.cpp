@@ -1,4 +1,6 @@
 #include "bullet_graphics_component.h"
+#include "asset_constants.h"
+#include "locator.h"
 
 #include <cassert>
 #include <string>
@@ -19,6 +21,14 @@ BulletGraphicsComponent::BulletGraphicsComponent(CapEngine::VideoManager* videoM
 }
 
 void BulletGraphicsComponent::render(GameObject* object){
-  Rectangle rect = object->boundingPolygon();
-  videoManager->drawSurface(rect.x, rect.y, surface);
+  Rectangle dstRect = object->boundingPolygon();
+  Rectangle srcRect;
+  srcRect.x = 0;
+  srcRect.y = 0;
+  srcRect.width = dstRect.width;
+  srcRect.height = dstRect.height;
+
+  AssetManager* assetManager = Locator::assetManager;
+  assetManager->draw(BULLETTEXTUREID, srcRect, dstRect);
+  //videoManager->drawSurface(rect.x, rect.y, surface);
 }

@@ -14,9 +14,6 @@ class BulletPhysicsComponent : public PhysicsComponent {
  private:
   int width;
   int height;
-  
-  
-
 };
 
 #endif
