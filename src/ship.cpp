@@ -72,11 +72,9 @@ void Ship::handleCollision(CollisionType type, CollisionClass class_, GameObject
 unique_ptr<GameObject> makeShip(){
   unique_ptr<GameObject> ship(new GameObject);
 
-  VideoManager* videoManager = Locator::videoManager;
-  
   unique_ptr<InputComponent> uic(new ShipInputComponent());
   unique_ptr<PhysicsComponent> upc(new ShipPhysicsComponent());
-  unique_ptr<GraphicsComponent> ugc(new ShipGraphicsComponent(videoManager));
+  unique_ptr<GraphicsComponent> ugc(new ShipGraphicsComponent());
   unique_ptr<CustomComponent> ucc(new ShipCustomComponent());
   ship->inputComponent.reset(uic.release());
   ship->physicsComponent.reset(upc.release());

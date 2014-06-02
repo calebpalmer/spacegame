@@ -64,9 +64,8 @@ void BasicGun::fire(int x, int y) {
     bullet->velocity.y = -200.0;
     bullet->velocity.z = 0;
 
-    VideoManager* videoManager = Locator::videoManager;
     unique_ptr<PhysicsComponent> upc(new BulletPhysicsComponent());
-    unique_ptr<GraphicsComponent> ugc(new BulletGraphicsComponent(videoManager));
+    unique_ptr<GraphicsComponent> ugc(new BulletGraphicsComponent());
     unique_ptr<InputComponent> uic(new NullInputComponent);
     unique_ptr<CustomComponent> ucc(new NullCustomComponent);
 

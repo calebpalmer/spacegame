@@ -7,14 +7,9 @@
 class BulletGraphicsComponent : public GraphicsComponent {
 
  public:
-  BulletGraphicsComponent(CapEngine::VideoManager*);
+  BulletGraphicsComponent();
 
   virtual void render(GameObject* object);
-
- private:
-  CapEngine::VideoManager* videoManager;
-  static CapEngine::Surface* surface;
-
 
 };
 

@@ -5,12 +5,8 @@
 
 class ShipGraphicsComponent : public GraphicsComponent {
  public:
-  ShipGraphicsComponent(CapEngine::VideoManager*);
+  ShipGraphicsComponent();
   virtual void render(GameObject* object);
-
- private:
-  CapEngine::VideoManager* videoManager;
-  CapEngine::Surface* surface;
 };
 
 #endif // SHIP_GRAPHICS_COMPONENT_H
