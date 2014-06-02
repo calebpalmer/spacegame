@@ -38,5 +38,6 @@ tests:
 	cd test && $(MAKE)
 
 tags:
-	ctags -e -R . && ctags -e -R -a /usr/include/SDL && ctags -e -R -a $(CAPENGINEPATH)
+	#ctags -e -R . && ctags -e -R -a /usr/include/SDL && ctags -e -R -a $(CAPENGINEPATH)
 #	ctags -e -R .
+	ctags -R . && ctags -R -a /usr/include/SDL && ctags -R -a $(CAPENGINEPATH)
