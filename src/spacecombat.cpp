@@ -65,7 +65,7 @@ void SpaceCombatGame::init() {
   upShip->position = position;
   world.addObject(*(upShip.release()));
 
-  upMap.reset(new Map1(p_videoManager.get()));
+  upMap.reset(new Map1());
   upMap->init();
   world.currentMap = upMap.get();
   

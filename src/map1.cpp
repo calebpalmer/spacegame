@@ -1,20 +1,18 @@
 #include "map1.h"
+#include "locator.h"
+#include "asset_constants.h"
 
 #include <cassert>
 
 using namespace CapEngine;
 
-Map1::Map1(VideoManager* videoManagerIn) { 
-  assert(videoManagerIn != nullptr);
-  videoManager = videoManagerIn;
-}
+Map1::Map1() {}
 
 void Map1::init(){
   width = 1200;
   height = 2400;
   y = height;
   velocity = 200;
-  surface = videoManager->loadImage("res/level1.png");
  }
 
  Map1::~Map1() {}
@@ -27,29 +25,42 @@ void Map1::init(){
  }
 
  void Map1::render(int screenWidth, int screenHeight){
+   AssetManager* assetManager = Locator::assetManager;
+
    // whats left of map
    if(y - screenHeight < 0){
     int yStart = screenHeight - y;
-    Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    rect.w = width;
-    rect.h = y;
-    videoManager->drawSurface(0, yStart, surface, &rect);
+    Rectangle srcRect;
+    srcRect.x = 0;
+    srcRect.y = 0;
+    srcRect.width = width;
+    srcRect.height = y;
+
+    Rectangle dstRect(0, 0, srcRect.width, srcRect.height);
+
+    assetManager->draw(LEVEL1TEXTUREID, srcRect, dstRect);
 
     // start of the map again
-    rect.y = height - (screenHeight - y);
-    rect.h = screenHeight - y;
-    videoManager->drawSurface(0, 0, surface, &rect);
+    srcRect.y = height - (screenHeight - y);
+    srcRect.height = screenHeight - y;
+
+    dstRect.height = srcRect.height;
+
+    assetManager->draw(LEVEL1TEXTUREID, srcRect, dstRect);
+
+
 
   }
   else{
-    Rect rect;
-    rect.x = 0;
-    rect.y = y - screenHeight;
-    rect.w = screenWidth;
-    rect.h = screenHeight;
-    videoManager->drawSurface(0, 0, surface, &rect);
+    Rectangle srcRect;
+    srcRect.x = 0;
+    srcRect.y = y - screenHeight;
+    srcRect.width = screenWidth;
+    srcRect.height = screenHeight;
+
+    Rectangle dstRect(0, 0, srcRect.width, srcRect.height);
+
+    assetManager->draw(LEVEL1TEXTUREID, srcRect, dstRect);
   }
 }
 
