@@ -29,7 +29,6 @@ void Map1::init(){
 
    // whats left of map
    if(y - screenHeight < 0){
-    int yStart = screenHeight - y;
     Rectangle srcRect;
     srcRect.x = 0;
     srcRect.y = 0;
