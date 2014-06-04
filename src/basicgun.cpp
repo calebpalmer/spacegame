@@ -7,6 +7,8 @@
 #include "bullet_graphics_component.h"
 #include "null_input_component.h"
 #include "null_custom_component.h"
+#include "locator.h"
+#include "asset_constants.h"
 
 #include <memory>
 #include <iostream>
@@ -82,12 +84,18 @@ void BasicGun::fire(int x, int y) {
     Locator::world->addObject(*p_bullet);
     
     // create sound effect
+    /**
     if(pShotSound == nullptr){
       unique_ptr<PCM> upShotSound(new PCM(shotSoundPath));
       pShotSound = upShotSound.release();
     }
+    
+
     unique_ptr<PCM> sentSound(new PCM(*pShotSound));
     Locator::soundPlayer->addSound(sentSound.release());
+    **/
+
+    Locator::assetManager->playSound(BASICSHOTSOUNDID, false);
     
   }
 }
