@@ -42,6 +42,12 @@ class CustomComponent {
 
 };
 
+class AIComponent {
+ public:
+  virtual void update(GameObject* object) = 0;
+  virtual AIComponent* clone() const = 0;
+};
+
 class GameObject{
 
  private:
@@ -69,6 +75,7 @@ class GameObject{
   std::shared_ptr<PhysicsComponent> physicsComponent;
   std::shared_ptr<GraphicsComponent> graphicsComponent;
   std::shared_ptr<CustomComponent> customComponent;
+  std::shared_ptr<AIComponent> mpAIComponent;
 
   CapEngine::Vector position;
   CapEngine::Vector orientation;

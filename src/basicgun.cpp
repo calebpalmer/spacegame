@@ -7,6 +7,7 @@
 #include "bullet_graphics_component.h"
 #include "null_input_component.h"
 #include "null_custom_component.h"
+#include "null_ai_component.h"
 #include "locator.h"
 #include "asset_constants.h"
 
@@ -70,16 +71,15 @@ void BasicGun::fire(int x, int y) {
     unique_ptr<GraphicsComponent> ugc(new BulletGraphicsComponent());
     unique_ptr<InputComponent> uic(new NullInputComponent);
     unique_ptr<CustomComponent> ucc(new NullCustomComponent);
+    unique_ptr<AIComponent> pAIC(new NullAIComponent);
 
     bullet->physicsComponent.reset(upc.release());
     bullet->graphicsComponent.reset(ugc.release());
     bullet->inputComponent.reset(uic.release());
     bullet->customComponent.reset(ucc.release());
+    bullet->mpAIComponent.reset(pAIC.release());
     bullet->objectType = GameObject::Projectile;
 
-#ifdef DEBUG
-    std::cout << "Fire!!" << std::endl;
-#endif
     GameObject *p_bullet = bullet.release();
     Locator::world->addObject(*p_bullet);
     
