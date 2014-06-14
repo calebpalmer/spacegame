@@ -10,6 +10,7 @@
 #include "spacecombat.h"
 #include "map1.h"
 #include "locator.h"
+#include "enemy_factory.h"
 
 using namespace CapEngine;
 using namespace std;
@@ -64,6 +65,13 @@ void SpaceCombatGame::init() {
   Vector position(xPos, yPos, 0.0);
   upShip->position = position;
   world.addObject(*(upShip.release()));
+
+  // add an enemy
+  EnemyFactory enemyFactory("dummy");
+  auto enemyObject = enemyFactory.makeEnemy(-1);
+  enemyObject->position.x  = (screenConfig.width / 2.0) - (enemyObject->boundingPolygon().x / 2.0);
+  enemyObject->position.y = 20;
+  world.addObject(*(enemyObject.release()));
 
   upMap.reset(new Map1());
   upMap->init();

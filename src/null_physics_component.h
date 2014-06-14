@@ -10,7 +10,7 @@ class NullPhysicsComponent : public PhysicsComponent {
     return CapEngine::Rectangle(0.0, 0.0, 0.0, 0.0);
   }
   virtual bool handleCollision(GameObject* object, CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject) {
-    return true;
+    return false;
   }
 };
 
