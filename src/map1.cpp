@@ -18,7 +18,7 @@ void Map1::init(){
  Map1::~Map1() {}
 
  void Map1::update(real timestep){
-   y -= velocity * (timestep / 1000.0);
+   y -= velocity * (timestep / 1000.0);  // convert to seconds first
    if( y < 0 ){
      y = height + y;
    }
@@ -35,20 +35,23 @@ void Map1::init(){
     srcRect.width = width;
     srcRect.height = y;
 
-    Rectangle dstRect(0, 0, srcRect.width, srcRect.height);
+     int destY = screenHeight - y;
+     Rectangle dstRect(0, destY, srcRect.width, screenHeight - destY);
 
-    assetManager->draw(LEVEL1TEXTUREID, srcRect, dstRect);
+     assetManager->draw(LEVEL1TEXTUREID, srcRect, dstRect);
 
     // start of the map again
+    srcRect.x = 0;
     srcRect.y = height - (screenHeight - y);
     srcRect.height = screenHeight - y;
+    srcRect.width = width;
 
+    dstRect.x = 0;
+    dstRect.y = 0;
+    dstRect.width = srcRect.width;
     dstRect.height = srcRect.height;
 
     assetManager->draw(LEVEL1TEXTUREID, srcRect, dstRect);
-
-
-
   }
   else{
     Rectangle srcRect;
