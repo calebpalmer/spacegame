@@ -1,5 +1,6 @@
 #include "world.h"
 #include "CapEngine.h"
+#include "locator.h"
 
 #include <iostream>
 
@@ -124,6 +125,34 @@ vector<CollisionEvent> World::getCollisions(GameObject& object){
   }
   
   //check for inter-object collisions
+  // for each game object, only iterate the game objects after it
+  auto outerObjectIter = gameObjects.begin();
+  while(outerObjectIter != gameObjects.end()){
+    auto innerObjectIter = next(outerObjectIter);
+    while(innerObjectIter != gameObjects.end()){
+      // get bounding polygons for both objects
+      Rectangle obj1MBR = (*outerObjectIter)->boundingPolygon();
+      Rectangle obj2MBR = (*innerObjectIter)->boundingPolygon();
+      // if they intersect, create a CollisionEvent
+      CollisionType colType = detectMBRCollision(obj1MBR, obj2MBR);
+      if(colType != COLLISION_NONE){
+	CollisionEvent colEvent;
+	colEvent.object1 = *outerObjectIter;
+	colEvent.object2 = *innerObjectIter;
+	colEvent.type = colType;
+	if((*innerObjectIter)->objectType == GameObject::Projectile){
+	  colEvent.class_ = COLLISION_PROJECTILE;
+	}
+	else{
+	  colEvent.class_ = COLLISION_ENTITY;
+	}
+	// append to collisions vector
+	Locator::logger->log("Collision!", Logger::CDEBUG);
+      }
+      innerObjectIter++;
+    }
+    outerObjectIter++;
+  }
 
   return collisions;  
 }

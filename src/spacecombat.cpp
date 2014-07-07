@@ -21,6 +21,7 @@ SpaceCombatGame::SpaceCombatGame() : showFPS(false) {
   screenConfig.pDepth = 32;
   screenConfig.opengl = false;
 
+  logger.currentLevel = Logger::CDEBUG;
 }
 
 SpaceCombatGame::~SpaceCombatGame(){
