@@ -6,6 +6,7 @@
 #include <string>
 
 #include "CapEngine.h"
+#include "gameobject.h"
 
 class BasicGun : public Gun {
  public:
@@ -16,7 +17,7 @@ class BasicGun : public Gun {
   std::unique_ptr<Gun> clone() const;
 
   // Gun virtual functions
-  void fire(int x, int y);
+  void fire(int x, int y, ObjectID parentID);
   int ammoRemaining() ;
 
  private:

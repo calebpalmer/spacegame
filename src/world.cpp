@@ -3,6 +3,7 @@
 #include "locator.h"
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 using namespace CapEngine;
@@ -52,48 +53,55 @@ void World::update(double ms){
 
   **/
   for(iter = gameObjects.begin(); iter != gameObjects.end(); iter++){ 
-    unique_ptr<GameObject> newObject = (*iter)->update(ms);
-    vector<CollisionEvent> collisions;
-    collisions = getCollisions(*newObject);
-    if(collisions.size() > 0){
-      while(collisions.size() >  0){
+    if((*iter)->m_objectState != GameObject::Dead && (*iter)->m_objectState != GameObject::Dead) {
+      unique_ptr<GameObject> newObject = (*iter)->update(ms);
+      vector<CollisionEvent> collisions;
+      collisions = getCollisions(*newObject);
+      if(collisions.size() > 0){
+	while(collisions.size() >  0){
 #ifdef DEBUG
-        cout << collisions.size() << " collisions detected. " << endl;
+	  cout << collisions.size() << " collisions detected. " << endl;
 #endif
-        bool handled = false;
-        bool collisionsRecomputed = false;
-        auto collisionIter = collisions.begin();
-        while(collisionIter != collisions.end() && !collisionsRecomputed) {
-	  handled = newObject->handleCollision(collisionIter->type, collisionIter->class_, collisionIter->object2);
-	  if(handled){
-	    *iter = newObject.release();
-	    collisions = getCollisions(**iter);
-	    collisionsRecomputed = true;
-	  }
-	  else{
-	    bool rollback = false;
-	    //// if collision event causes rollback
-	    if(collisionIter->class_ == COLLISION_WALL){
-	      if((*iter)->objectType != GameObject::Projectile){
-		rollback=true;
-	      }
+	  bool handled = false;
+	  bool collisionsRecomputed = false;
+	  auto collisionIter = collisions.begin();
+	  while(collisionIter != collisions.end() && !collisionsRecomputed) {
+	    handled = newObject->handleCollision(collisionIter->type, collisionIter->class_, collisionIter->object2);
+	    if(handled){
+	      *iter = newObject.release();
+	      collisionIter = collisions.erase(collisionIter);
+	      //collisions = getCollisions(**iter);
+	      //collisionsRecomputed = true;
 	    }
-      
-	    if(rollback){
-	      // leave *iter at the current object
-	      collisions = getCollisions(**iter);
-	      collisionsRecomputed = true;
-	    }
-	  }
-	  collisionIter++;
-        }  // for each collision
-      }  // while collisions.size() != 0 
-    } 
+	    else{
+	      bool rollback = false;
+	      //// if collision event causes rollback
+	      if(collisionIter->class_ == COLLISION_WALL){
+		if((*iter)->objectType != GameObject::Projectile){
+		  rollback=true;
+		}
+		if((*iter)->objectType == GameObject::Projectile){
+		  (*iter)->m_objectState = GameObject::Dead;
+		}
 
-    else{
-      *iter = newObject.release();
-    }
-  } 
+	      }
+      
+	      if(rollback){
+		// leave *iter at the current object
+		collisions = getCollisions(**iter);
+		collisionsRecomputed = true;
+	      }
+	      collisionIter = collisions.erase(collisionIter);
+	    }
+	  }  // for each collision
+	}  // while collisions.size() != 0 
+      }// if(collisionss.size() > 0)  
+
+      else{
+	*iter = newObject.release();
+      }
+    } 
+  }
   removeObsoleteObjects();
   addQueuedObjects();
 }
@@ -128,28 +136,33 @@ vector<CollisionEvent> World::getCollisions(GameObject& object){
   // for each game object, only iterate the game objects after it
   auto outerObjectIter = gameObjects.begin();
   while(outerObjectIter != gameObjects.end()){
-    auto innerObjectIter = next(outerObjectIter);
-    while(innerObjectIter != gameObjects.end()){
-      // get bounding polygons for both objects
-      Rectangle obj1MBR = (*outerObjectIter)->boundingPolygon();
-      Rectangle obj2MBR = (*innerObjectIter)->boundingPolygon();
-      // if they intersect, create a CollisionEvent
-      CollisionType colType = detectMBRCollision(obj1MBR, obj2MBR);
-      if(colType != COLLISION_NONE){
-	CollisionEvent colEvent;
-	colEvent.object1 = *outerObjectIter;
-	colEvent.object2 = *innerObjectIter;
-	colEvent.type = colType;
-	if((*innerObjectIter)->objectType == GameObject::Projectile){
-	  colEvent.class_ = COLLISION_PROJECTILE;
+    if ((*outerObjectIter)->m_objectState != GameObject::Dead){
+      auto innerObjectIter = next(outerObjectIter);
+      while(innerObjectIter != gameObjects.end()){
+	if ((*innerObjectIter)->m_objectState != GameObject::Dead){
+	  // get bounding polygons for both objects
+	  Rectangle obj1MBR = (*outerObjectIter)->boundingPolygon();
+	  Rectangle obj2MBR = (*innerObjectIter)->boundingPolygon();
+	  // if they intersect, create a CollisionEvent
+	  CollisionType colType = detectMBRCollision(obj1MBR, obj2MBR);
+	  if(colType != COLLISION_NONE){
+	    CollisionEvent colEvent;
+	    colEvent.object1 = *outerObjectIter;
+	    colEvent.object2 = *innerObjectIter;
+	    colEvent.type = colType;
+	    if((*innerObjectIter)->objectType == GameObject::Projectile){
+	      colEvent.class_ = COLLISION_PROJECTILE;
+	    }
+	    else{
+	      colEvent.class_ = COLLISION_ENTITY;
+	    }
+	    // append to collisions vector
+	    Locator::logger->log("Collision!", Logger::CDEBUG);
+	    collisions.push_back(colEvent);
 	}
-	else{
-	  colEvent.class_ = COLLISION_ENTITY;
 	}
-	// append to collisions vector
-	Locator::logger->log("Collision!", Logger::CDEBUG);
+	innerObjectIter++;
       }
-      innerObjectIter++;
     }
     outerObjectIter++;
   }
@@ -167,8 +180,14 @@ void World::removeObsoleteObjects(){
 	// delete object
 	deleteObject = true;
       }
+      else if((*iter)->m_objectState == GameObject::Dead || (*iter)->m_objectState == GameObject::Inactive){
+	deleteObject = true;
+      }
     }
     if(deleteObject){
+      ostringstream msg;
+      msg << "Object " << (*iter)->m_objectID << " deleted";
+      Locator::logger->log(msg.str(), Logger::CDEBUG);
       delete *iter;
       iter = gameObjects.erase(iter);
       // don't need to increment iterator because erase() already returns the next in the container.

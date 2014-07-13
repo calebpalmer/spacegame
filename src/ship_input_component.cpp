@@ -44,6 +44,6 @@ void ShipInputComponent::update(GameObject* object){
     real xStart, yStart;
     xStart = br.x + (br.width / 2.0);
     yStart = br.y;
-    dynamic_cast<ShipCustomComponent*>(object->customComponent.get())->fireMainGun(xStart, yStart);
+    dynamic_cast<ShipCustomComponent*>(object->customComponent.get())->fireMainGun(xStart, yStart, object->m_objectID);
   }
 }

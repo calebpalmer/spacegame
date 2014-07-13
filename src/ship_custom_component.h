@@ -12,7 +12,7 @@ class ShipCustomComponent :  public CustomComponent {
   virtual void update(GameObject* object);
   virtual CustomComponent* clone() const;
 
-  void fireMainGun(int x, int y);
+  void fireMainGun(int x, int y, ObjectID parentID);
   
 };
 

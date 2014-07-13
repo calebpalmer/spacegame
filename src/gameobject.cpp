@@ -1,13 +1,24 @@
 #include "gameobject.h"
 
+#include "logger.h"
+#include "locator.h"
+
 #include <iostream>
+#include <sstream>
 
 using namespace CapEngine;
 using namespace std;
 
-GameObject::~GameObject(){
+ObjectID GameObject::nextID = 0;
 
+GameObject::GameObject(bool newID) {
+  if(newID){
+    m_objectID = generateID();
+  }
+  m_parentObjectID = -1;
 }
+
+GameObject::~GameObject(){ }
 
 void GameObject::render(){
   graphicsComponent->render(this);
@@ -46,7 +57,7 @@ bool GameObject::handleCollision(CapEngine::CollisionType type, CapEngine::Colli
 }
 
 unique_ptr<GameObject> GameObject::clone() const{
-  unique_ptr<GameObject> newObj(new GameObject);
+  unique_ptr<GameObject> newObj(new GameObject(false));
 
   newObj->position = position;
   newObj->orientation = orientation;
@@ -67,6 +78,16 @@ unique_ptr<GameObject> GameObject::clone() const{
     newObj->mpAIComponent.reset(mpAIComponent->clone());
   }
   newObj->objectType = objectType;
+  newObj->m_objectState = m_objectState;
+  newObj->m_objectID = m_objectID;
+  newObj->m_parentObjectID = m_parentObjectID;
 
   return std::move(newObj);
+}
+
+ObjectID GameObject::generateID(){
+  ostringstream msg;
+  msg << "ID " << (nextID + 1) << " generated";
+  Locator::logger->log(msg.str(), Logger::CDEBUG);
+  return nextID++;
 }

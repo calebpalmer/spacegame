@@ -20,6 +20,6 @@ CustomComponent* ShipCustomComponent::clone() const {
 }
 
 
-void ShipCustomComponent::fireMainGun(int x, int y){
-  mainGun->fire(x, y);
+void ShipCustomComponent::fireMainGun(int x, int y, ObjectID parentID){
+  mainGun->fire(x, y, parentID);
 }

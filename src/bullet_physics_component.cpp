@@ -25,5 +25,5 @@ CapEngine::Rectangle  BulletPhysicsComponent::boundingPolygon(const GameObject* 
 }
 
 bool BulletPhysicsComponent::handleCollision(GameObject* object, CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject){
-  return false;
+  return true;
 }

@@ -49,7 +49,7 @@ BasicGun& BasicGun::operator=(const BasicGun& src){
 }
 
 
-void BasicGun::fire(int x, int y) {
+void BasicGun::fire(int x, int y, ObjectID parentID) {
   // make sure cooltime period has elapsed
   double current = currentTime();
   if((lastFire == -1 || (current - lastFire >= cooldown)) 
@@ -79,22 +79,13 @@ void BasicGun::fire(int x, int y) {
     bullet->customComponent.reset(ucc.release());
     bullet->mpAIComponent.reset(pAIC.release());
     bullet->objectType = GameObject::Projectile;
+    bullet->m_parentObjectID = parentID;
+    bullet->m_objectState = GameObject::Active;
 
     GameObject *p_bullet = bullet.release();
     Locator::world->addObject(*p_bullet);
     
     // create sound effect
-    /**
-    if(pShotSound == nullptr){
-      unique_ptr<PCM> upShotSound(new PCM(shotSoundPath));
-      pShotSound = upShotSound.release();
-    }
-    
-
-    unique_ptr<PCM> sentSound(new PCM(*pShotSound));
-    Locator::soundPlayer->addSound(sentSound.release());
-    **/
-
     Locator::assetManager->playSound(BASICSHOTSOUNDID, false);
     
   }

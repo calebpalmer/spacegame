@@ -1,11 +1,10 @@
 PLATFORM=UNIX
 CAPENGINEPATH=../capengine
-LOGLEVEL=Logger::CDEBUG
 CC=g++
 CPP=g++
 INCLUDE=./src
 INCLUDEDIRS=-I$(CAPENGINEPATH)
-CFLAGS= -g -Wall -D$(PLATFORM) -DDEBUG -DLOGLEVEL=$(LOGLEVEL) -std=c++0x $(INCLUDEDIRS) `sdl-config --cflags` `xml2-config --cflags`
+CFLAGS= -g -Wall -D$(PLATFORM) -DDEBUG -std=c++0x $(INCLUDEDIRS) `sdl-config --cflags` `xml2-config --cflags`
 LIBS=`sdl-config --cflags --libs` `xml2-config --libs` -lSDL_image -lboost_system -lboost_filesystem $(CAPENGINEPATH)/libcapengine.so
 #CFLAGS= -O3 -D$(PLATFORM) -DDEBUG
 

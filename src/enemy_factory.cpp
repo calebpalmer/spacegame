@@ -28,6 +28,7 @@ unique_ptr<GameObject> EnemyFactory::makeEnemy(int enemyKey){
   pEnemyObject->mpAIComponent.reset(pAIComponent.release());
 
   pEnemyObject->objectType = GameObject::EnemyShip;
+  pEnemyObject->m_objectState = GameObject::Active;
   
   return std::move(pEnemyObject);
 }

@@ -18,8 +18,20 @@ Rectangle ShipPhysicsComponent::boundingPolygon(const GameObject* object) const 
 }
 
 bool ShipPhysicsComponent::handleCollision(GameObject* object, CapEngine::CollisionType type, CapEngine::CollisionClass class_, GameObject* otherObject){
+  // let the world handle wall collisions
   if(class_ == COLLISION_WALL){
     return false;
+  }
+  
+  // ships own projectiles
+  if( otherObject->m_parentObjectID == object->m_objectID ){
+    // do nothing
+    return true;
+  }
+
+  else {
+    // game over?
+    
   }
   return false;
 }

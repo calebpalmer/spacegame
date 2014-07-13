@@ -48,10 +48,13 @@ class AIComponent {
   virtual AIComponent* clone() const = 0;
 };
 
+typedef long ObjectID;
+
 class GameObject{
 
  private:
   GameObject(const GameObject&);
+  GameObject& operator=(const GameObject&);
 
  public:
   enum ObjectType {
@@ -61,14 +64,23 @@ class GameObject{
     Projectile
   };
 
-  GameObject() {};
+  enum ObjectState {
+    Inactive,
+    Starting,
+    Active,
+    Dying,
+    Dead
+  };
+
+  GameObject(bool newID = true);
   ~GameObject();
-  GameObject& operator=(const GameObject& src);
   void render();
   std::unique_ptr<GameObject> update(double ms) const;
   CapEngine::Rectangle boundingPolygon() const;
   bool handleCollision(CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
   std::unique_ptr<GameObject> clone() const;
+  static ObjectID generateID();
+
 
  public:
   std::shared_ptr<InputComponent> inputComponent;
@@ -82,6 +94,13 @@ class GameObject{
   CapEngine::Vector velocity;
 
   ObjectType objectType;
+  ObjectState m_objectState;
+  ObjectID m_objectID;
+  ObjectID m_parentObjectID;
+
+  static ObjectID nextID;
+
 };
+
 
 #endif // GAMEOBJECT_H

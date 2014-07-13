@@ -21,7 +21,12 @@ SpaceCombatGame::SpaceCombatGame() : showFPS(false) {
   screenConfig.pDepth = 32;
   screenConfig.opengl = false;
 
+  
+#ifdef DEBUG
   logger.currentLevel = Logger::CDEBUG;
+#endif
+
+    
 }
 
 SpaceCombatGame::~SpaceCombatGame(){
@@ -65,6 +70,7 @@ void SpaceCombatGame::init() {
   real yPos = screenConfig.height - br.height - 2.0;
   Vector position(xPos, yPos, 0.0);
   upShip->position = position;
+  upShip->m_objectState = GameObject::Active;
   world.addObject(*(upShip.release()));
 
   // add an enemy
@@ -72,6 +78,7 @@ void SpaceCombatGame::init() {
   auto enemyObject = enemyFactory.makeEnemy(-1);
   enemyObject->position.x  = (screenConfig.width / 2.0) - (enemyObject->boundingPolygon().x / 2.0);
   enemyObject->position.y = 20;
+  enemyObject->m_objectState = GameObject::Active;
   world.addObject(*(enemyObject.release()));
 
   upMap.reset(new Map1());
