@@ -23,7 +23,7 @@ class BasicPhysicsComponent : public PhysicsComponent {
     return false;
   }
 
- private:
+ protected:
   int mWidth;
   int mHeight;
 };

@@ -2,7 +2,7 @@
 
 #include "null_input_component.h"
 #include "enemy_graphics_component.h"
-#include "basic_physics_component.h"
+#include "enemy_physics_component.h"
 #include "null_custom_component.h"
 #include "null_ai_component.h"
 #include "asset_constants.h"
@@ -17,7 +17,7 @@ unique_ptr<GameObject> EnemyFactory::makeEnemy(int enemyKey){
   
   unique_ptr<InputComponent> pInputComponent(new NullInputComponent());
   unique_ptr<GraphicsComponent> pGraphicsComponent(new EnemyGraphicsComponent(ENEMYTEXTUREID));
-  unique_ptr<PhysicsComponent> pPhysicsComponent(new BasicPhysicsComponent(32, 32));
+  unique_ptr<PhysicsComponent> pPhysicsComponent(new EnemyPhysicsComponent(32, 32));
   unique_ptr<CustomComponent> pCustomComponent(new NullCustomComponent);
   unique_ptr<AIComponent> pAIComponent(new NullAIComponent);
 

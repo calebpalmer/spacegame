@@ -9,7 +9,7 @@ LIBS=`sdl-config --cflags --libs` `xml2-config --libs` -lSDL_image -lboost_syste
 #CFLAGS= -O3 -D$(PLATFORM) -DDEBUG
 
 objects = spacecombat.o ship.o map1.o gameobject.o locator.o ship_input_component.o ship_physics_component.o ship_graphics_component.o ship_custom_component.o world.o basicgun.o \
-	bullet_physics_component.o bullet_graphics_component.o enemy_graphics_component.o enemy_factory.o
+	bullet_physics_component.o bullet_graphics_component.o enemy_graphics_component.o enemy_factory.o enemy_physics_component.o
 
 #Application
 spacecombat: $(objects)
