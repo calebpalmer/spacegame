@@ -3,12 +3,14 @@
 
 #include "gameobject.h"
 #include "gun.h"
+#include "world.h"
 
 class ShipCustomComponent :  public CustomComponent {
  private:
+  World* m_pWorld;
   std::unique_ptr<Gun> mainGun;
  public:
-  ShipCustomComponent();
+  ShipCustomComponent(World* world);
   virtual void update(GameObject* object);
   virtual CustomComponent* clone() const;
 

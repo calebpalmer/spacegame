@@ -6,9 +6,10 @@
 #include "map.h"
 #include "map1.h"
 #include "gameobject.h"
-#include "world.h"
+#include "gamestate.h"
 
 #include <memory>
+#include <vector>
 
 #define MS_PER_UPDATE 16.67 // 60fps
 //#define MS_PER_UPDATE 33.33 // 30fps
@@ -16,8 +17,7 @@
 class SpaceCombatGame : IEventSubscriber{
 
  public:
-  SpaceCombatGame();
-  ~SpaceCombatGame();
+  static SpaceCombatGame* getInstance();
   void init();
   void loop();
   void receiveEvent(const SDL_Event* event, CapEngine::Time* time);  // IEventSubscriber
@@ -26,21 +26,23 @@ class SpaceCombatGame : IEventSubscriber{
   struct CapEngine::Screen_t screenConfig;
  
  private:
+  SpaceCombatGame();
+  ~SpaceCombatGame();
   void update();
   void render(double frameFactor);
   void renderBackground();
   std::vector<CollisionEvent> getCollisions();
 
  private:
+  static SpaceCombatGame* theGame;
   bool quit;
   bool showFPS;
-  World world;
-  std::unique_ptr<Map1> upMap;
   CapEngine::TimeStep timeStep;
   CapEngine::Keyboard keyboard;
   std::unique_ptr<CapEngine::VideoManager> p_videoManager;
   CapEngine::Logger logger;
   std::unique_ptr<CapEngine::EventDispatcher> p_eventDispatcher;
+  std::vector< GameState* > m_gameStates;
   const std::string assetFilePath = "res/assets.xml";
 };
 

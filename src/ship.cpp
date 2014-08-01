@@ -14,13 +14,13 @@
 using namespace std;
 using namespace CapEngine;
 
-unique_ptr<GameObject> makeShip(){
+unique_ptr<GameObject> makeShip(World* world){
   unique_ptr<GameObject> ship(new GameObject);
 
   unique_ptr<InputComponent> uic(new ShipInputComponent());
   unique_ptr<PhysicsComponent> upc(new ShipPhysicsComponent());
   unique_ptr<GraphicsComponent> ugc(new ShipGraphicsComponent());
-  unique_ptr<CustomComponent> ucc(new ShipCustomComponent());
+  unique_ptr<CustomComponent> ucc(new ShipCustomComponent(world));
   unique_ptr<AIComponent> pAIC(new NullAIComponent());
   ship->inputComponent.reset(uic.release());
   ship->physicsComponent.reset(upc.release());

@@ -7,10 +7,11 @@
 
 #include "CapEngine.h"
 #include "gameobject.h"
+#include "world.h"
 
 class BasicGun : public Gun {
  public:
-  BasicGun();
+  BasicGun(World* world);
   BasicGun(const BasicGun&);
   BasicGun& operator=(const BasicGun& src);
   ~BasicGun() {}
@@ -25,6 +26,7 @@ class BasicGun : public Gun {
   int ammunition;
   double cooldown; // time in ms between shots fired
   double lastFire;
+  World* m_pWorld;
 
   static CapEngine::PCM* pShotSound;
   const std::string shotSoundPath = "res/basicshot.wav";

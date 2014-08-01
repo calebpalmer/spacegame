@@ -3,6 +3,7 @@
 
 #include "CapEngine.h"
 #include "gameobject.h"
+#include "world.h"
 
 #include <memory>
 
@@ -32,7 +33,7 @@ class Ship : public GameObject{
 };
 */
 
-std::unique_ptr<GameObject> makeShip();
+std::unique_ptr<GameObject> makeShip(World* world);
 
 #endif // SHIP_H
 

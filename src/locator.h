@@ -12,8 +12,6 @@ class Locator{
   static CapEngine::SoundPlayer* soundPlayer;
   static CapEngine::Keyboard* keyboard;
   static CapEngine::AssetManager* assetManager;
-  
-  static World* world;
 };
 
 #endif

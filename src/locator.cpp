@@ -5,4 +5,3 @@ CapEngine::Logger* Locator::logger = nullptr;
 CapEngine::SoundPlayer* Locator::soundPlayer = nullptr;
 CapEngine::Keyboard* Locator::keyboard = nullptr;
 CapEngine::AssetManager* Locator::assetManager = nullptr;
-World* Locator::world = nullptr;

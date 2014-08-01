@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cassert>
 
 using namespace std;
 using namespace CapEngine;
@@ -36,71 +37,65 @@ void World::removeObject(GameObject& object){
 }
 
 void World::update(double ms){
-  vector<GameObject*>::iterator iter;
+  addQueuedObjects();
+  // update the map
+  currentMap->update(ms);
   /**
      for each game object
          get collisions
 	 for each collision
 	     check to see if object can handle it
 	     if object can handle it
-	         detect collisions again
-		 loop
+	        so be it
 	     else
 	         world handles collision
 		 if rollback to original object is needed
+		     roll back then
 		     detect collisions again
      
 
   **/
+  vector<GameObject*>::iterator iter;
   for(iter = gameObjects.begin(); iter != gameObjects.end(); iter++){ 
     if((*iter)->m_objectState != GameObject::Dead && (*iter)->m_objectState != GameObject::Inactive) {
+      assert(*iter != nullptr);
       unique_ptr<GameObject> newObject = (*iter)->update(ms);
+      GameObject* pCurrentObject = newObject.get();
+      assert(newObject.get() != nullptr);
       vector<CollisionEvent> collisions;
-      collisions = getCollisions(*newObject);
-      if(collisions.size() > 0){
-	while(collisions.size() >  0){
-	  bool handled = false;
-	  bool collisionsRecomputed = false;
-	  auto collisionIter = collisions.begin();
-	  while(collisionIter != collisions.end() && !collisionsRecomputed) {
-	    handled = newObject->handleCollision(collisionIter->type, collisionIter->class_, collisionIter->object2);
-	    if(handled){
-	      *iter = newObject.release();
-	      collisionIter = collisions.erase(collisionIter);
-	      //collisions = getCollisions(**iter);
-	      //collisionsRecomputed = true;
-	    }
-	    else{
-	      bool rollback = false;
-	      //// if collision event causes rollback
-	      if(collisionIter->class_ == COLLISION_WALL){
-		if((*iter)->objectType != GameObject::Projectile){
-		  rollback=true;
-		}
-		if((*iter)->objectType == GameObject::Projectile){
-		  (*iter)->m_objectState = GameObject::Dead;
-		}
-
+      collisions = getCollisions(*pCurrentObject);
+      bool rollback = false;
+      while(collisions.size() != 0){
+	bool handled = false;
+	for(unsigned int i = 0; i < collisions.size(); i++){
+	  handled = pCurrentObject->handleCollision(collisions[i].type, collisions[i].class_, collisions[i].object2);
+	  // if handled by the object
+	  if(handled){
+	    collisions.erase(collisions.begin() + i);
+	  }
+	  else{ // let World handle it
+	    //// if collision event causes rollback
+	    if(collisions[i].class_ == COLLISION_WALL){
+	      if((*iter)->objectType != GameObject::Projectile){
+		rollback=true;
 	      }
-      
-	      if(rollback){
-		// leave *iter at the current object
-		collisions = getCollisions(**iter);
-		collisionsRecomputed = true;
+	      if((*iter)->objectType == GameObject::Projectile){
+		(*iter)->m_objectState = GameObject::Dead;
 	      }
-	      collisionIter = collisions.erase(collisionIter);
 	    }
-	  }  // for each collision
-	}  // while collisions.size() != 0 
-      }// if(collisionss.size() > 0)  
-
-      else{
+	    if(!rollback) {
+	      collisions.erase(collisions.begin() + i);
+	    }
+	  }
+	}  // for each collision
+      }
+      if( !rollback ){
+	delete *iter;
 	*iter = newObject.release();
       }
-    } 
-  }
+    }  // if object is not dead or inactive
+  }  // gameobject loop
   removeObsoleteObjects();
-  addQueuedObjects();
 }
 
 vector<CollisionEvent> World::getCollisions(GameObject& object){
@@ -133,6 +128,7 @@ vector<CollisionEvent> World::getCollisions(GameObject& object){
   // for each game object, only iterate the game objects after it
   auto otherObjectIter = gameObjects.begin();
   while(otherObjectIter != gameObjects.end()){
+    assert(*otherObjectIter != nullptr);
     if ((*otherObjectIter)->m_objectState != GameObject::Dead && (*otherObjectIter)->m_objectID != object.m_objectID ){
       // get bounding polygons for both objects
       Rectangle obj1MBR = object.boundingPolygon();

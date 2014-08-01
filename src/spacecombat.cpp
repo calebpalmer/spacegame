@@ -10,10 +10,19 @@
 #include "spacecombat.h"
 #include "map1.h"
 #include "locator.h"
-#include "enemy_factory.h"
+#include "playstate.h"
 
 using namespace CapEngine;
 using namespace std;
+
+SpaceCombatGame* SpaceCombatGame::theGame = nullptr;
+
+SpaceCombatGame* SpaceCombatGame::getInstance(){
+  if(theGame == nullptr){
+    theGame = new SpaceCombatGame();
+  }
+  return theGame;
+}
 
 SpaceCombatGame::SpaceCombatGame() : showFPS(false) {
   screenConfig.width = 1200;
@@ -54,42 +63,24 @@ void SpaceCombatGame::init() {
 
   // AssetManager
   unique_ptr<AssetManager> upAssetManager(new AssetManager(*(p_videoManager.get()), soundPlayer, assetFilePath));
+
+  //initialize keyboard map
+  keyboard.keyMap[Keyboard::CAP_KEYUP].state = Keyboard::CAP_UNPRESSED;
+  keyboard.keyMap[Keyboard::CAP_KEYDOWN].state = Keyboard::CAP_UNPRESSED;
+  keyboard.keyMap[Keyboard::CAP_KEYLEFT].state = Keyboard::CAP_UNPRESSED;
+  keyboard.keyMap[Keyboard::CAP_KEYRIGHT].state = Keyboard::CAP_UNPRESSED;
   
   // setup locator
   Locator::videoManager = p_videoManager.get();
   Locator::logger = &logger;
   Locator::keyboard = &keyboard;
   Locator::soundPlayer = &soundPlayer;
-  Locator::world = &(this->world);
   Locator::assetManager = upAssetManager.release();
 
-  // initialise game objects
-  unique_ptr<GameObject> upShip = makeShip();
-  Rectangle br = upShip->boundingPolygon();
-  real xPos = screenConfig.width / 2.0;
-  real yPos = screenConfig.height - br.height - 2.0;
-  Vector position(xPos, yPos, 0.0);
-  upShip->position = position;
-  upShip->m_objectState = GameObject::Active;
-  world.addObject(*(upShip.release()));
-
-  // add an enemy
-  EnemyFactory enemyFactory("dummy");
-  auto enemyObject = enemyFactory.makeEnemy(-1);
-  enemyObject->position.x  = (screenConfig.width / 2.0) - (enemyObject->boundingPolygon().x / 2.0);
-  enemyObject->position.y = 20;
-  enemyObject->m_objectState = GameObject::Active;
-  world.addObject(*(enemyObject.release()));
-
-  upMap.reset(new Map1());
-  upMap->init();
-  world.currentMap = upMap.get();
-  
-  //initialize keyboard map
-  keyboard.keyMap[Keyboard::CAP_KEYUP].state = Keyboard::CAP_UNPRESSED;
-  keyboard.keyMap[Keyboard::CAP_KEYDOWN].state = Keyboard::CAP_UNPRESSED;
-  keyboard.keyMap[Keyboard::CAP_KEYLEFT].state = Keyboard::CAP_UNPRESSED;
-  keyboard.keyMap[Keyboard::CAP_KEYRIGHT].state = Keyboard::CAP_UNPRESSED;
+  // add starting GameState
+  unique_ptr<GameState> pGameState(new PlayState(screenConfig.width, screenConfig.height));
+  pGameState->onLoad();
+  m_gameStates.push_back(pGameState.release());
 
 }
 
@@ -119,32 +110,13 @@ void SpaceCombatGame::loop() {
 }
 
 void SpaceCombatGame::update() {
-  // update objects based on input state (keyboard)
- //upShip->update(MS_PER_UPDATE);
-  //upMap->update(MS_PER_UPDATE);
-  world.currentMap->update(MS_PER_UPDATE);
-  world.update(MS_PER_UPDATE);\
-
-  // check for collisions
-  /*vector<CollisionEvent> collisions = getCollisions();
-    while(collisions.size() >  0){
-    vector<CollisionEvent>::iterator iter;
-    for(iter = collisions.begin(); iter != collisions.end(); iter++){
-      iter->object1->handleCollision(iter->type, iter->class_, iter->object2);
-    }
-    collisions = getCollisions();
-    }*/
-    }
+  (m_gameStates.back())->update(MS_PER_UPDATE);
+}
 
 void SpaceCombatGame::render(double frameFactor) {  
   // framefactor is for just i've updated past the current frame, so render should interpolate the game objects based on this factor
   // update has updated the game world time ahead of real time
-  upMap->render(screenConfig.width, screenConfig.height);
-  vector<GameObject*>::iterator iter;
-  for(iter = world.gameObjects.begin(); iter != world.gameObjects.end(); iter++){
-    (*iter)->render();
-    }
-  //upShip->render();
+  m_gameStates.back()->render();
   p_videoManager->drawScreen();
 }
 
@@ -217,9 +189,9 @@ vector<CollisionEvent> SpaceCombatGame::getCollisions(){
 
 int main(){
   try{
-	SpaceCombatGame game;
-	game.init();
-	game.loop();
+    SpaceCombatGame* game = SpaceCombatGame::getInstance();
+	game->init();
+	game->loop();
 	return EXIT_SUCCESS;
   }
   catch (CapEngineException& e){

@@ -87,7 +87,7 @@ unique_ptr<GameObject> GameObject::clone() const{
 
 ObjectID GameObject::generateID(){
   ostringstream msg;
-  msg << "ID " << (nextID + 1) << " generated";
+  msg << "ID " << (nextID) << " generated";
   Locator::logger->log(msg.str(), Logger::CDEBUG);
   return nextID++;
 }

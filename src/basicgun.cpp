@@ -19,7 +19,8 @@ using namespace CapEngine;
 
 PCM* BasicGun::pShotSound = nullptr;
 
-BasicGun::BasicGun() {
+BasicGun::BasicGun(World* world) :
+  m_pWorld(world) {
   ammunition = -1;  // unlimited
   lastFire = -1;
   cooldown = 300; // ms
@@ -31,7 +32,7 @@ BasicGun::BasicGun(const BasicGun& src){
 }
 
 unique_ptr<Gun> BasicGun::clone() const {
-  unique_ptr<BasicGun> newGun(new BasicGun());
+  unique_ptr<BasicGun> newGun(new BasicGun(m_pWorld));
   newGun->ammunition = ammunition;
   newGun->cooldown = cooldown;
   newGun->lastFire = lastFire;
@@ -83,7 +84,7 @@ void BasicGun::fire(int x, int y, ObjectID parentID) {
     bullet->m_objectState = GameObject::Active;
 
     GameObject *p_bullet = bullet.release();
-    Locator::world->addObject(*p_bullet);
+     m_pWorld->addObject(*p_bullet);
     
     // create sound effect
     Locator::assetManager->playSound(BASICSHOTSOUNDID, false);

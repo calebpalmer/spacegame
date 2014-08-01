@@ -25,8 +25,10 @@
 (defun myproj-debug ()
   (interactive)
   ;; (set (make-local-variable 'gdb-command-name) "gdb -i=mi spacecombat -d ../../github/capengine")
-  (defvar gud-gdb-command-name "gdb -i=mi -d ../../github/capengine spacecombat")
-  (setq gud-gdb-command-name "gdb -i=mi -d ../../github/capengine spacecombat")
+  (setenv "LD_LIBRARY_PATH" ".")
+  (defvar gud-gdb-command-name "")
+  ;;(setq gud-gdb-command-name "gdb -i=mi --ex \"dir ../capengine\" spacecombat")
+  (setq gud-gdb-command-name "gdb -i=mi  spacecombat")
   (call-interactively 'gdb)
 )
 
