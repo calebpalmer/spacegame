@@ -79,8 +79,10 @@ void SpaceCombatGame::init() {
 
   // add starting GameState
   unique_ptr<GameState> pGameState(new PlayState(screenConfig.width, screenConfig.height));
-  pGameState->onLoad();
-  m_gameStates.push_back(pGameState.release());
+  this->pushState(*(pGameState.release()));
+  //pGameState->onLoad();
+  //m_gameStates.push_back(pGameState.release());
+  
 
 }
 
@@ -169,22 +171,28 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
       }
     }
   }
-  
 }
 
-vector<CollisionEvent> SpaceCombatGame::getCollisions(){
-  vector<CollisionEvent> collisions;
-  // // check for wall collision
-  // CollisionType colType = detectMBRCollisionInterior(upShip->boundingPolygon(), Rectangle(0, 0, screenConfig.width, screenConfig.height));
-  // if(colType != COLLISION_NONE){
-  //   CollisionEvent event;
-  //   event.object1 = upShip.get();
-  //   event.object2 =nullptr;
-  //   event.type = colType;
-  //   event.class_ = COLLISION_WALL;
-  //   collisions.push_back(event);
-  // }
-  return collisions;
+void SpaceCombatGame::popState(){
+  if(m_gameStates.size() > 0){
+    GameState* pPoppedState = m_gameStates.back();
+    m_gameStates.pop_back();
+    if(pPoppedState->onDestroy() == false){
+      Locator::logger->log("Failed to destroy popped state", Logger::CWARNING);
+    }
+  }
+}
+
+void SpaceCombatGame::pushState(GameState& gameState){
+  m_gameStates.push_back(&gameState);
+  if(m_gameStates.back()->onLoad() == false){
+    Locator::logger->log("Failed to init pushed state", Logger::CWARNING);
+  }
+}
+
+void SpaceCombatGame::switchState(GameState& gameState){
+  this->popState();
+  this->pushState(gameState);
 }
 
 int main(){

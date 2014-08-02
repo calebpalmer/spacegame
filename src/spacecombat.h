@@ -21,19 +21,18 @@ class SpaceCombatGame : IEventSubscriber{
   void init();
   void loop();
   void receiveEvent(const SDL_Event* event, CapEngine::Time* time);  // IEventSubscriber
- 
- private:
-  struct CapEngine::Screen_t screenConfig;
- 
+  void pushState(GameState& gameState);
+  void popState();
+  void switchState(GameState& gameState);
+
  private:
   SpaceCombatGame();
   ~SpaceCombatGame();
   void update();
   void render(double frameFactor);
-  void renderBackground();
-  std::vector<CollisionEvent> getCollisions();
 
  private:
+  struct CapEngine::Screen_t screenConfig;
   static SpaceCombatGame* theGame;
   bool quit;
   bool showFPS;
