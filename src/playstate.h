@@ -11,7 +11,7 @@
 
 class PlayState : public GameState {
  public:
-  PlayState(int screenWidth, int screenHeight);
+  PlayState();
   virtual ~PlayState() {};
   virtual void render();
   virtual void update(double ms);

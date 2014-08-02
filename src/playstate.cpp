@@ -13,8 +13,9 @@
 using namespace std;
 using namespace CapEngine;
 
-PlayState::PlayState(int screenWidth, int screenHeight) :
-  m_screenWidth(screenWidth), m_screenHeight(screenHeight) {}
+PlayState::PlayState(){
+  Locator::videoManager->getWindowResolution(&m_screenWidth, &m_screenHeight);
+}
 
 bool PlayState::onLoad(){
   try{

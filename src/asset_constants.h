@@ -1,10 +1,14 @@
 #ifndef ASSETS_CONSTANTS_H
 #define ASSET_CONSTANTS_H
 
+// game objects
 #define SHIPTEXTUREID 1
 #define BULLETTEXTUREID 2
 #define LEVEL1TEXTUREID 3
 #define ENEMYTEXTUREID 4
+
+// start menu
+#define TITLETEXTUREID 1000
 
 #define BASICSHOTSOUNDID 1
 

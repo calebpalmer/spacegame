@@ -11,6 +11,7 @@
 #include "map1.h"
 #include "locator.h"
 #include "playstate.h"
+#include "start_menu_state.h"
 
 using namespace CapEngine;
 using namespace std;
@@ -78,8 +79,11 @@ void SpaceCombatGame::init() {
   Locator::assetManager = upAssetManager.release();
 
   // add starting GameState
-  unique_ptr<GameState> pGameState(new PlayState(screenConfig.width, screenConfig.height));
-  this->pushState(*(pGameState.release()));
+  // unique_ptr<GameState> pGameState(new PlayState(screenConfig.width, screenConfig.height));
+  // this->pushState(*(pGameState.release()));
+
+  unique_ptr<GameState> pStartMenuState(new StartMenuState());
+  this->pushState(*(pStartMenuState.release()));
   //pGameState->onLoad();
   //m_gameStates.push_back(pGameState.release());
   
@@ -147,6 +151,10 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
     case SDLK_SPACE:
       keyboard.keyMap[Keyboard::CAP_SPACE].state = (event->type == SDL_KEYUP ? Keyboard::CAP_UNPRESSED : Keyboard::CAP_PRESSED);
       break;
+    case SDLK_RETURN:
+      keyboard.keyMap[Keyboard::CAP_ENTER].state = (event->type == SDL_KEYUP ? Keyboard::CAP_UNPRESSED : Keyboard::CAP_PRESSED);
+      break;
+
     default:
       break;
     }
