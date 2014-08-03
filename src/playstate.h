@@ -22,6 +22,8 @@ class PlayState : public GameState {
   int m_screenWidth;
   int m_screenHeight;
   World m_world;
+
+  bool m_startPause;
 };
 
 #endif

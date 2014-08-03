@@ -133,6 +133,7 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
 	logger.log("quitting. ", Logger::CDEBUG);
 	return;
   }
+  // update the keyboard
   else if(event->type == SDL_KEYUP || event->type == SDL_KEYDOWN){
     SDLKey ksym = ((SDL_KeyboardEvent*)event)->keysym.sym;
     switch(ksym){
@@ -153,6 +154,12 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
       break;
     case SDLK_RETURN:
       keyboard.keyMap[Keyboard::CAP_ENTER].state = (event->type == SDL_KEYUP ? Keyboard::CAP_UNPRESSED : Keyboard::CAP_PRESSED);
+      break;
+    case SDLK_BACKSPACE:
+      keyboard.keyMap[Keyboard::CAP_BACKSPACE].state = (event->type == SDL_KEYUP ? Keyboard::CAP_UNPRESSED : Keyboard::CAP_PRESSED);
+      break;
+    case SDLK_ESCAPE:
+      keyboard.keyMap[Keyboard::CAP_ESCAPE].state = (event->type == SDL_KEYUP ? Keyboard::CAP_UNPRESSED : Keyboard::CAP_PRESSED);
       break;
 
     default:

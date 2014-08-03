@@ -9,12 +9,16 @@
 #include "locator.h"
 #include "logger.h"
 #include "locator.h"
+#include "spacecombat.h"
+#include "start_menu_state.h"
+#include "pausestate.h"
 
 using namespace std;
 using namespace CapEngine;
 
 PlayState::PlayState(){
   Locator::videoManager->getWindowResolution(&m_screenWidth, &m_screenHeight);
+  m_startPause = false;
 }
 
 bool PlayState::onLoad(){
@@ -62,6 +66,19 @@ bool PlayState::onDestroy(){
 }
 
 void PlayState::update(double ms){
+  // chech for pause or reset
+  if(Locator::keyboard->keyMap[Keyboard::CAP_BACKSPACE].state == Keyboard::CAP_PRESSED){
+    SpaceCombatGame::getInstance()->switchState(*(new StartMenuState()));
+    return;
+  }
+  if(Locator::keyboard->keyMap[Keyboard::CAP_ESCAPE].state == Keyboard::CAP_PRESSED){
+    m_startPause = true;
+  }
+  if(m_startPause && Locator::keyboard->keyMap[Keyboard::CAP_ESCAPE].state == Keyboard::CAP_UNPRESSED){
+    SpaceCombatGame::getInstance()->pushState(*(new PauseState()));
+    m_startPause = false;
+  }
+
   m_world.update(ms);
 }
 
