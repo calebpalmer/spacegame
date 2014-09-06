@@ -3,6 +3,8 @@
 
 #include "gamestate.h"
 #include "map.h"
+#include "uiobject.h"
+
 
 #include <vector>
 #include <string>
@@ -10,6 +12,7 @@
 
 class StartMenuState : public GameState {
  public:
+  StartMenuState();
   virtual void render();
   virtual void update(double ms);
   virtual bool onLoad();
@@ -22,6 +25,7 @@ class StartMenuState : public GameState {
   int m_windowHeight;
 
   std::unique_ptr<Map> m_pMap; // just for a scrolling background
+  std::vector<UIObject*> m_uiObjects;
 };
 
 #endif // START_MENU_STATE

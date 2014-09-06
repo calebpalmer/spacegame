@@ -38,6 +38,7 @@ class SpaceCombatGame : IEventSubscriber{
   bool showFPS;
   CapEngine::TimeStep timeStep;
   CapEngine::Keyboard keyboard;
+  CapEngine::Mouse mouse;
   std::unique_ptr<CapEngine::VideoManager> p_videoManager;
   CapEngine::Logger logger;
   std::unique_ptr<CapEngine::EventDispatcher> p_eventDispatcher;

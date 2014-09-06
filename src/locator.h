@@ -11,6 +11,7 @@ class Locator{
   static CapEngine::Logger* logger;
   static CapEngine::SoundPlayer* soundPlayer;
   static CapEngine::Keyboard* keyboard;
+  static CapEngine::Mouse* mouse;
   static CapEngine::AssetManager* assetManager;
 };
 

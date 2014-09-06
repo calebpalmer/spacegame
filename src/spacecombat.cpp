@@ -25,7 +25,7 @@ SpaceCombatGame* SpaceCombatGame::getInstance(){
   return theGame;
 }
 
-SpaceCombatGame::SpaceCombatGame() : showFPS(false) {
+SpaceCombatGame::SpaceCombatGame() : showFPS(false), mouse(3) {
   screenConfig.width = 1200;
   screenConfig.height = 800;
   screenConfig.pDepth = 32;
@@ -56,6 +56,7 @@ void SpaceCombatGame::init() {
   p_eventDispatcher.reset(new EventDispatcher(p_videoManager.get()));
   p_eventDispatcher->subscribe(this, systemEvent);
   p_eventDispatcher->subscribe(this, keyboardEvent);
+  p_eventDispatcher->subscribe(this, mouseEvent);
   logger.log("Events subscribed", Logger::CDEBUG);
 
   // Sound
@@ -75,6 +76,7 @@ void SpaceCombatGame::init() {
   Locator::videoManager = p_videoManager.get();
   Locator::logger = &logger;
   Locator::keyboard = &keyboard;
+  Locator::mouse = &mouse;
   Locator::soundPlayer = &soundPlayer;
   Locator::assetManager = upAssetManager.release();
 
@@ -165,25 +167,61 @@ void SpaceCombatGame::receiveEvent(const SDL_Event* event, Time* time){
     default:
       break;
     }
-    // check to see if fps should be shown
-    if(event->type == SDL_KEYUP){
-      SDLKey ksym = ((SDL_KeyboardEvent*)event)->keysym.sym;
-      if(ksym == SDLK_TAB){
-	if(showFPS == true){
-	  showFPS = false;
-	  p_videoManager->displayFPS(false);
-	}
-	else{
-	  showFPS = true;
-	  ostringstream ttfStream;
-	  ttfStream << getCurrentDir() << "/res/tahoma.ttf";
-	  Uint8 r = 255;
-	  Uint8 g = 255;
-	  Uint8 b = 255;
-	  p_videoManager->displayFPS(true, ttfStream.str(), r, g, b);
-	}
-
+  }
+  // update the mouse position 
+  else if(event->type == SDL_MOUSEMOTION) {
+    int x = ((SDL_MouseMotionEvent*)event)->x;
+    int y = ((SDL_MouseMotionEvent*)event)->y;
+    Locator::mouse->setx(x);
+    Locator::mouse->sety(y);
+  }
+  // update the mouse buttons
+  else if(event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP){
+    if(((SDL_MouseButtonEvent*)event)->type == SDL_MOUSEBUTTONDOWN){
+      switch(((SDL_MouseButtonEvent*)event)->button){
+      case SDL_BUTTON_LEFT:
+	Locator::mouse->setButtonState(0, true);
+	break;
+      case SDL_BUTTON_MIDDLE:
+	Locator::mouse->setButtonState(1, true);
+	break;
+      case SDL_BUTTON_RIGHT:
+	Locator::mouse->setButtonState(2, true);
+	break;
       }
+    }
+    if(((SDL_MouseButtonEvent*)event)->type == SDL_MOUSEBUTTONUP){
+      switch(((SDL_MouseButtonEvent*)event)->button){
+      case SDL_BUTTON_LEFT:
+	Locator::mouse->setButtonState(0, false);
+	break;
+      case SDL_BUTTON_MIDDLE:
+	Locator::mouse->setButtonState(1, false);
+	break;
+      case SDL_BUTTON_RIGHT:
+	Locator::mouse->setButtonState(2, false);
+	break;
+      }
+    }
+  }
+  // check to see if fps should be shown
+  if(event->type == SDL_KEYUP){
+    SDLKey ksym = ((SDL_KeyboardEvent*)event)->keysym.sym;
+    if(ksym == SDLK_TAB){
+      if(showFPS == true){
+	showFPS = false;
+	p_videoManager->displayFPS(false);
+      }
+      else{
+	showFPS = true;
+	ostringstream ttfStream;
+	ttfStream << getCurrentDir() << "/res/tahoma.ttf";
+	Uint8 r = 255;
+	Uint8 g = 255;
+	Uint8 b = 255;
+	p_videoManager->displayFPS(true, ttfStream.str(), r, g, b);
+      }
+
     }
   }
 }

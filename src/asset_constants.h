@@ -10,6 +10,10 @@
 // start menu
 #define TITLETEXTUREID 1000
 
+// UI textures
+#define BASICBUTTONTEXTUREID 2000
+
+// sounds
 #define BASICSHOTSOUNDID 1
 
 #endif // ASSETS_CONSTANTS_H 
