@@ -2,6 +2,9 @@
 #define PAUSE_STATE_H
 
 #include "gamestate.h"
+#include "uiobject.h"
+
+#include <vector>
 
 class PauseState : public GameState {
  public:
@@ -10,9 +13,12 @@ class PauseState : public GameState {
   virtual void update(double ms);
   virtual bool onLoad();
   virtual bool onDestroy();
- private:
+  
+  static void returnToMenuCallback();
+  static void resumeCallback();
+ protected:
   bool m_escapePressed;
-
+  std::vector<UIObject*> m_uiObjects;
 };
 
 
