@@ -15,6 +15,7 @@ class TextButton : public Button {
  public:
   TextButton(std::string text, std::string font, int fontSize, CapEngine::Vector position);
   ~TextButton();
+  void registerCallback(void (*callback)());
   virtual void update();
   virtual void render();
   virtual void setEnabled(bool enabled = true);
@@ -39,6 +40,7 @@ class TextButton : public Button {
   CapEngine::Surface* m_pTextSurfaceInactive;
   CapEngine::Surface* m_pTextSurfaceActive;
   CapEngine::Vector m_position;
+  void (*m_callback)();
 
 };
 

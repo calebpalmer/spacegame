@@ -24,6 +24,7 @@ class SpaceCombatGame : IEventSubscriber{
   void pushState(GameState& gameState);
   void popState();
   void switchState(GameState& gameState);
+  void exitGame();
 
  private:
   SpaceCombatGame();

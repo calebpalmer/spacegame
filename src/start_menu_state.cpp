@@ -23,7 +23,9 @@ StartMenuState::StartMenuState(){
   int yStart = 500;
   int ySpacing = height + 15;
   pStartButton->setPosition(Vector(xStart, yStart));
+  pStartButton->registerCallback(this->startButtonCallback);
   pExitButton->setPosition(Vector(xStart, 1 * (yStart + ySpacing)));
+  pExitButton->registerCallback(this->exitButtonCallback);
 
   // add ui objects
   m_uiObjects.push_back(pStartButton.release());
@@ -74,4 +76,13 @@ void StartMenuState::update(double ms){
     unique_ptr<GameState> pGameState(new PlayState());
     SpaceCombatGame::getInstance()->switchState(*(pGameState.release()));
  }
+}
+
+void StartMenuState::startButtonCallback(){
+  unique_ptr<GameState> pGameState(new PlayState());
+  SpaceCombatGame::getInstance()->switchState(*(pGameState.release()));
+}
+
+void StartMenuState::exitButtonCallback(){
+  SpaceCombatGame::getInstance()->exitGame();
 }

@@ -17,15 +17,18 @@ class StartMenuState : public GameState {
   virtual void update(double ms);
   virtual bool onLoad();
   virtual bool onDestroy();
+
+  static void startButtonCallback();
+  static void exitButtonCallback();
   
- private:
+ protected:
   int m_menuSelection;
   bool m_enterPressed;
   int m_windowWidth;
   int m_windowHeight;
-
   std::unique_ptr<Map> m_pMap; // just for a scrolling background
   std::vector<UIObject*> m_uiObjects;
+
 };
 
 #endif // START_MENU_STATE

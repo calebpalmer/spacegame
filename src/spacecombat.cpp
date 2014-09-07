@@ -248,6 +248,10 @@ void SpaceCombatGame::switchState(GameState& gameState){
   this->pushState(gameState);
 }
 
+void SpaceCombatGame::exitGame(){
+  quit = true;
+}
+
 int main(){
   try{
     SpaceCombatGame* game = SpaceCombatGame::getInstance();

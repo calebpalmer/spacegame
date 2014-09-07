@@ -45,9 +45,9 @@ void TextButton::update() {
     Rectangle buttonRect(m_position.x, m_position.y, m_width, m_height);
     Relation relation = MBRRelate(x, y, buttonRect);
     if(relation == INSIDE || relation == TOUCH){
-      // perform some action
-      // how?  register callback function?
-      // set a flag and something can poll for it?
+      if(m_callback != nullptr){
+	m_callback();
+      }
       m_selected = false;
     }
     else{
@@ -109,4 +109,8 @@ void TextButton::setText(const string text) {
 
 void TextButton::setPosition(const Vector position){
   m_position = position;
+}
+
+void TextButton::registerCallback(void (*callback)()) {
+  m_callback = callback;
 }
