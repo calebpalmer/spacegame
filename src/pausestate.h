@@ -8,7 +8,7 @@
 
 class PauseState : public GameState {
  public:
-  virtual ~PauseState() {};
+  ~PauseState();
   virtual void render();
   virtual void update(double ms);
   virtual bool onLoad();

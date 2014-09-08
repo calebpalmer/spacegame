@@ -6,6 +6,7 @@
 
 class Button : public UIObject {
  public:
+  virtual ~Button() {}
   virtual std::string getText() const = 0;
   virtual void setText(const std::string text) = 0;
 };

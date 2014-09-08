@@ -13,6 +13,7 @@
 class StartMenuState : public GameState {
  public:
   StartMenuState();
+  ~StartMenuState();
   virtual void render();
   virtual void update(double ms);
   virtual bool onLoad();
@@ -26,6 +27,7 @@ class StartMenuState : public GameState {
   bool m_enterPressed;
   int m_windowWidth;
   int m_windowHeight;
+  long m_soundId;
   std::unique_ptr<Map> m_pMap; // just for a scrolling background
   std::vector<UIObject*> m_uiObjects;
 

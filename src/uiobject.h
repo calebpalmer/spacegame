@@ -8,6 +8,7 @@
 
 class UIObject {
  public:
+  virtual ~UIObject() {}
   virtual void update() = 0;
   virtual void render() = 0;
   virtual void setEnabled(bool enabled) = 0;

@@ -32,6 +32,12 @@ StartMenuState::StartMenuState(){
   m_uiObjects.push_back(pExitButton.release());
 }
 
+StartMenuState::~StartMenuState(){
+  for (auto i : m_uiObjects){
+    delete i;
+  }
+}
+
 bool StartMenuState::onLoad(){
   // load assets
   m_enterPressed = false;
@@ -41,12 +47,14 @@ bool StartMenuState::onLoad(){
   m_pMap->init();
 
   Locator::videoManager->getWindowResolution(&m_windowWidth, &m_windowHeight );
+  
+  unique_ptr<PCM> pMusic(new PCM("res/The_Spread.wav"));
+  m_soundId = Locator::soundPlayer->addSound(pMusic.release());
 
   return true;
 }
 
 bool StartMenuState::onDestroy(){
-
   return true;
 }
 
