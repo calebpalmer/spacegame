@@ -55,6 +55,7 @@ bool StartMenuState::onLoad(){
 }
 
 bool StartMenuState::onDestroy(){
+  Locator::soundPlayer->deleteSound(m_soundId);
   return true;
 }
 
