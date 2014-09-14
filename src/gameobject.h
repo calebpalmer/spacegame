@@ -48,6 +48,12 @@ class AIComponent {
   virtual AIComponent* clone() const = 0;
 };
 
+class ObjectCreator{
+ public:
+  virtual std::unique_ptr<GameObject> createObject() = 0;
+  virtual ~ObjectCreator() {}
+};
+
 typedef long ObjectID;
 
 class GameObject{

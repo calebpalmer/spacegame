@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32px"
+   height="32px"
+   id="svg2985"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="enemy1.svg"
+   inkscape:export-filename="/home/caleb/Projects/games/SpaceCombat/res/enemy1.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs2987" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.197802"
+     inkscape:cx="-6.0579003"
+     inkscape:cy="16"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     inkscape:window-x="-4"
+     inkscape:window-y="-1"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata2990">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       sodipodi:type="arc"
+       style="fill:#b3b3b3"
+       id="path2993"
+       sodipodi:cx="18.307165"
+       sodipodi:cy="15.166339"
+       sodipodi:rx="15.092248"
+       sodipodi:ry="14.422473"
+       d="m 33.399413,15.166339 a 15.092248,14.422473 0 1 1 -30.1844958,0 15.092248,14.422473 0 1 1 30.1844958,0 z"
+       transform="matrix(1.0473373,0,0,1.0835913,-3.1884956,-0.77660667)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff0000;fill-opacity:0"
+       id="path2995"
+       sodipodi:cx="18.842983"
+       sodipodi:cy="23.382236"
+       sodipodi:rx="9.3768406"
+       sodipodi:ry="8.3498526"
+       d="m 28.219824,23.382236 a 9.3768406,8.3498526 0 1 1 -18.7536813,0 9.3768406,8.3498526 0 1 1 18.7536813,0 z"
+       transform="matrix(1,0,0,1.1283423,-2.8577037,-2.8223224)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000"
+       id="path2999"
+       sodipodi:cx="16.476448"
+       sodipodi:cy="10.611874"
+       sodipodi:rx="6.5637879"
+       sodipodi:ry="3.170265"
+       d="m 23.040236,10.611874 a 6.5637879,3.170265 0 1 1 -13.1275759,0 6.5637879,3.170265 0 1 1 13.1275759,0 z"
+       transform="translate(-0.4465162,0)" />
+    <path
+       style="fill:#ffffff;fill-opacity:1"
+       d="m 23.129539,25.793424 c 0,5.006063 -3.278558,9.064278 -7.322865,9.064278 -4.044307,0 -7.3228658,-4.058215 -7.3228658,-9.064278 0,-5.006063 3.2785588,-9.064279 7.3228658,-9.064279 4.044307,0 7.322865,4.058216 7.322865,9.064279 z"
+       id="path3790"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

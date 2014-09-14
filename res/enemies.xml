@@ -1,9 +1,10 @@
 <enemys>
 
   <enemy id="1">
-    <image>res/enemy1.png</image>
+    <graphic>res/enemy1.png</graphic>
+    <ai>dumb</ai>
+    <physics>straight</physics>
     <gun>BasicGun</gun>
-    <ai>stationary</ai>
   </enemy>
 
 </enemys>

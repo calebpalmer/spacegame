@@ -1,34 +1,65 @@
 #include "enemy_factory.h"
 
+#include "enemy_creators.h"
+#include "locator.h"
+#include "CapEngine.h"
 #include "null_input_component.h"
 #include "enemy_graphics_component.h"
 #include "enemy_physics_component.h"
 #include "null_custom_component.h"
 #include "null_ai_component.h"
 #include "asset_constants.h"
+#include "enemy_creators.h"
+
+#include <sstream>
 
 using namespace std;
+using namespace CapEngine;
 
-EnemyFactory::EnemyFactory(std::string enemyConfigPath){ }
+EnemyFactory* EnemyFactory::s_pEnemyFactory = nullptr;
 
-unique_ptr<GameObject> EnemyFactory::makeEnemy(int enemyKey){
+EnemyFactory::EnemyFactory(){ 
+  unique_ptr<ObjectCreator> pBasicEnemy(new DumbEnemyCreator);
+  this->registerEnemy("Dumb", std::move(pBasicEnemy));
 
-  unique_ptr<GameObject> pEnemyObject(new GameObject);
-  
-  unique_ptr<InputComponent> pInputComponent(new NullInputComponent());
-  unique_ptr<GraphicsComponent> pGraphicsComponent(new EnemyGraphicsComponent(ENEMYTEXTUREID));
-  unique_ptr<PhysicsComponent> pPhysicsComponent(new EnemyPhysicsComponent(32, 32));
-  unique_ptr<CustomComponent> pCustomComponent(new NullCustomComponent);
-  unique_ptr<AIComponent> pAIComponent(new NullAIComponent);
+  unique_ptr<StraightLineEnemyCreator> pStraightLineEnemy(new StraightLineEnemyCreator);
+  this->registerEnemy("Straight", std::move(pStraightLineEnemy));
+}
 
-  pEnemyObject->inputComponent.reset(pInputComponent.release());
-  pEnemyObject->graphicsComponent.reset(pGraphicsComponent.release());
-  pEnemyObject->physicsComponent.reset(pPhysicsComponent.release());
-  pEnemyObject->customComponent.reset(pCustomComponent.release());
-  pEnemyObject->mpAIComponent.reset(pAIComponent.release());
+EnemyFactory::~EnemyFactory(){
+  for (auto i : m_enemyMap){
+    delete i.second;
+  }
+}
 
-  pEnemyObject->objectType = GameObject::EnemyShip;
-  pEnemyObject->m_objectState = GameObject::Active;
-  
+unique_ptr<GameObject> EnemyFactory::makeEnemy(string enemyKey){
+  auto i = m_enemyMap.find(enemyKey);
+  if(i == m_enemyMap.end()){
+    ostringstream msg;
+    msg << "ObjectCreator \"" << enemyKey << "\" is not registered registered";
+    throw CapEngineException(msg.str());
+  }
+
+  unique_ptr<GameObject> pEnemyObject = i->second->createObject();
   return std::move(pEnemyObject);
+}
+
+bool EnemyFactory::registerEnemy(std::string enemyKey, unique_ptr<ObjectCreator> creator){
+  auto i = m_enemyMap.find(enemyKey);
+  if( i != m_enemyMap.end() ){
+    ostringstream msg;
+    msg << "ObjectCreator \"" << enemyKey << "\" already registered";
+    Locator::logger->log(msg.str(), Logger::CDEBUG);
+    return false;
+  }
+
+  m_enemyMap[enemyKey] = creator.release();
+  return true;
+}
+
+EnemyFactory* EnemyFactory::getInstance(){
+  if(s_pEnemyFactory == nullptr){
+    s_pEnemyFactory = new EnemyFactory();
+  }
+  return s_pEnemyFactory;
 }

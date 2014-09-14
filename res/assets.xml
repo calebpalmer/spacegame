@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assets>
+  <textures>
+    <texture id="1">res/ship.png</texture>
+    <texture id="2">res/bullet.png</texture>
+    <texture id="3">res/level1.png </texture>
+    <texture id="4">res/enemy1.png</texture>
+    <!-- Menu -->
+    <texture id="1000">res/title.png</texture>
+    <!-- UI -->
+    <texture id="2000" frameHeight="100" frameWidth="300">res/basicbutton.png</texture>
+  </textures>
+  <sounds>
+    <!-- sound effects -->
+    <sound id="1">res/basicshot.wav</sound>
+
+    <!-- music -->
+    
+  </sounds>
+</assets>

@@ -1,11 +1,22 @@
 #include "ship_physics_component.h"
 
+#include "locator.h"
+
 using namespace CapEngine;
 
  void ShipPhysicsComponent::update(GameObject* object, double timestep){
    Vector displacement = object->velocity;
    displacement.scale((timestep / 1000.0));
    object->position = object->position + displacement;
+
+   int winw, winh;
+   Locator::videoManager->getWindowResolution(&winw, &winh);
+   Vector upperLeft;
+   upperLeft.y = object->position.x - (object->boundingPolygon().height / 2.0);
+
+   if(upperLeft.y >  winh){
+     object->m_objectState = GameObject::Inactive;
+   }
 }
 
 Rectangle ShipPhysicsComponent::boundingPolygon(const GameObject* object) const {
@@ -20,7 +31,7 @@ Rectangle ShipPhysicsComponent::boundingPolygon(const GameObject* object) const 
 bool ShipPhysicsComponent::handleCollision(GameObject* object, CapEngine::CollisionType type, CapEngine::CollisionClass class_, GameObject* otherObject){
   // let the world handle wall collisions
   if(class_ == COLLISION_WALL){
-    return false;
+    return true;
   }
   
   // ships own projectiles

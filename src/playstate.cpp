@@ -33,12 +33,23 @@ bool PlayState::onLoad(){
     m_world.addObject(*(upShip.release()));
 
     // add an enemy
-    EnemyFactory enemyFactory("dummy");
-    auto enemyObject = enemyFactory.makeEnemy(-1);
+    EnemyFactory* pEnemyFactory = EnemyFactory::getInstance();
+    auto enemyObject = pEnemyFactory->makeEnemy("Straight");
     enemyObject->position.x  = (m_screenWidth / 2.0) - (enemyObject->boundingPolygon().x / 2.0);
     enemyObject->position.y = 20;
+    enemyObject->velocity.y = 100;
     enemyObject->m_objectState = GameObject::Active;
     m_world.addObject(*(enemyObject.release()));
+
+    // add a straight enemy
+    // add an enemy
+    auto enemyObject2 = pEnemyFactory->makeEnemy("Straight");
+    enemyObject2->position.x  = (m_screenWidth / 4.0) - (enemyObject2->boundingPolygon().x / 4.0);
+    enemyObject2->position.y = 20;
+    enemyObject2->velocity.y = 100;
+    enemyObject2->m_objectState = GameObject::Active;
+    m_world.addObject(*(enemyObject2.release()));
+
     
     unique_ptr<Map> pMap(new Map1());
     //upMap.reset(new Map1());
