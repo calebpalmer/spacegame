@@ -9,6 +9,7 @@ class EnemyPhysicsComponent : public BasicPhysicsComponent {
  public:
  EnemyPhysicsComponent(int width, int height) : BasicPhysicsComponent(width, height) { }
   virtual bool handleCollision(GameObject* object, CapEngine::CollisionType, CapEngine::CollisionClass, GameObject* otherObject);
+  virtual void update(GameObject* object, double timestep);
 };
 
 #endif
