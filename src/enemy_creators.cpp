@@ -49,6 +49,8 @@ unique_ptr<GameObject> StraightLineEnemyCreator::createObject(){
 
   pEnemyObject->objectType = GameObject::EnemyShip;
   pEnemyObject->m_objectState = GameObject::Active;
+
+  pEnemyObject->velocity.y = 100;
   
   return std::move(pEnemyObject);
 }

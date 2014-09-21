@@ -11,6 +11,7 @@
 #include "map1.h"
 #include "locator.h"
 #include "playstate.h"
+#include "level.h"
 #include "start_menu_state.h"
 
 using namespace CapEngine;
@@ -83,6 +84,7 @@ void SpaceCombatGame::init() {
   // add starting GameState
   // unique_ptr<GameState> pGameState(new PlayState(screenConfig.width, screenConfig.height));
   // this->pushState(*(pGameState.release()));
+
 
   unique_ptr<GameState> pStartMenuState(new StartMenuState());
   this->pushState(*(pStartMenuState.release()));

@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "map.h"
 #include "uiobject.h"
+#include "level.h"
 
 
 #include <vector>
@@ -30,7 +31,6 @@ class StartMenuState : public GameState {
   long m_soundId;
   std::unique_ptr<Map> m_pMap; // just for a scrolling background
   std::vector<UIObject*> m_uiObjects;
-
 };
 
 #endif // START_MENU_STATE

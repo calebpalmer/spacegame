@@ -7,6 +7,7 @@
 #include "spacecombat.h"
 #include "map1.h"
 #include "textbutton.h"
+#include "level.h"
 
 using namespace std;
 using namespace CapEngine;
@@ -82,13 +83,13 @@ void StartMenuState::update(double ms){
 
   if( m_enterPressed == true && Locator::keyboard->keyMap[Keyboard::CAP_ENTER].state == Keyboard::CAP_UNPRESSED ){
     // start game
-    unique_ptr<GameState> pGameState(new PlayState());
+    unique_ptr<GameState> pGameState(new PlayState(1));
     SpaceCombatGame::getInstance()->switchState(*(pGameState.release()));
  }
 }
 
 void StartMenuState::startButtonCallback(){
-  unique_ptr<GameState> pGameState(new PlayState());
+  unique_ptr<GameState> pGameState(new PlayState(1));
   SpaceCombatGame::getInstance()->switchState(*(pGameState.release()));
 }
 

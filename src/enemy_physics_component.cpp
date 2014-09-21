@@ -8,6 +8,9 @@
 using namespace CapEngine;
 
 bool EnemyPhysicsComponent::handleCollision(GameObject* object, CapEngine::CollisionType type, CapEngine::CollisionClass class_, GameObject* otherObject){
+  if(class_ == CapEngine::COLLISION_WALL){
+    return true;
+  }
   if(class_ != CapEngine::COLLISION_WALL && otherObject->objectType == GameObject::Projectile && otherObject->m_parentObjectID != object->m_objectID){
     std::ostringstream msg;
     msg << "Enemy ID " << object->m_objectID << " Has been hit";

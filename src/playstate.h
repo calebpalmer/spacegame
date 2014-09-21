@@ -8,10 +8,14 @@
 #include "ship.h"
 #include "map1.h"
 #include "enemy_factory.h"
+#include "level.h"
+
+#include <vector>
+#include <memory>
 
 class PlayState : public GameState {
  public:
-  PlayState();
+  PlayState(int level);
   virtual ~PlayState() {};
   virtual void render();
   virtual void update(double ms);
@@ -24,6 +28,10 @@ class PlayState : public GameState {
   World m_world;
 
   bool m_startPause;
+  std::vector<std::unique_ptr<Level>> m_levels;
+  int m_level;
+  Level* m_currentLevel;
+  
 };
 
 #endif

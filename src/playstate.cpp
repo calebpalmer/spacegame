@@ -16,13 +16,22 @@
 using namespace std;
 using namespace CapEngine;
 
-PlayState::PlayState(){
+PlayState::PlayState(int level) 
+  : m_startPause(false), m_level(level) {
   Locator::videoManager->getWindowResolution(&m_screenWidth, &m_screenHeight);
-  m_startPause = false;
 }
 
 bool PlayState::onLoad(){
   try{
+    m_levels = parseLevelFile("res/levels.xml");
+    m_currentLevel = nullptr;
+    for(auto i = m_levels.begin(); i != m_levels.end();  i++){
+      if((*i)->getLevelNumber() == m_level){
+	m_currentLevel = (*i).get();
+      }
+    }
+    m_currentLevel->start();
+
     unique_ptr<GameObject> upShip = makeShip(&m_world);
     Rectangle mbr = upShip->boundingPolygon();
     real xPos = (m_screenWidth / 2.0) - (mbr.width / 2.0);
@@ -32,25 +41,6 @@ bool PlayState::onLoad(){
     upShip->m_objectState = GameObject::Active;
     m_world.addObject(*(upShip.release()));
 
-    // add an enemy
-    EnemyFactory* pEnemyFactory = EnemyFactory::getInstance();
-    auto enemyObject = pEnemyFactory->makeEnemy("Straight");
-    enemyObject->position.x  = (m_screenWidth / 2.0) - (enemyObject->boundingPolygon().x / 2.0);
-    enemyObject->position.y = 20;
-    enemyObject->velocity.y = 100;
-    enemyObject->m_objectState = GameObject::Active;
-    m_world.addObject(*(enemyObject.release()));
-
-    // add a straight enemy
-    // add an enemy
-    auto enemyObject2 = pEnemyFactory->makeEnemy("Straight");
-    enemyObject2->position.x  = (m_screenWidth / 4.0) - (enemyObject2->boundingPolygon().x / 4.0);
-    enemyObject2->position.y = 20;
-    enemyObject2->velocity.y = 100;
-    enemyObject2->m_objectState = GameObject::Active;
-    m_world.addObject(*(enemyObject2.release()));
-
-    
     unique_ptr<Map> pMap(new Map1());
     //upMap.reset(new Map1());
     pMap->init();
@@ -91,6 +81,7 @@ void PlayState::update(double ms){
   }
 
   m_world.update(ms);
+  m_currentLevel->update(ms, &m_world);
 }
 
 void PlayState::render(){
