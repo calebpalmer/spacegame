@@ -17,6 +17,7 @@ bool EnemyPhysicsComponent::handleCollision(GameObject* object, CapEngine::Colli
     Locator::logger->log(msg.str(), CapEngine::Logger::CDEBUG);
 
     object->m_objectState = GameObject::Dead;
+    otherObject->m_objectState = GameObject::Dead;
     return true;
   }
 
