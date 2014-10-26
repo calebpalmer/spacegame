@@ -7,6 +7,7 @@
     <texture id="4">res/enemy1.png</texture>
     <!-- Menu -->
     <texture id="1000">res/title.png</texture>
+    <texture id="1001">res/victory.png</texture>
     <!-- UI -->
     <texture id="2000" frameHeight="100" frameWidth="300">res/basicbutton.png</texture>
   </textures>

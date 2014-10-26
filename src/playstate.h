@@ -26,7 +26,7 @@ class PlayState : public GameState {
   int m_screenWidth;
   int m_screenHeight;
   World m_world;
-
+  long m_soundId;
   bool m_startPause;
   std::vector<std::unique_ptr<Level>> m_levels;
   int m_level;

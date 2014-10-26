@@ -34,6 +34,6 @@
 
 (global-set-key [f12] 'myproj-compile)
 (global-set-key [f11] 'myproj-clean)
-;;(global-set-key [f10] 'myproj-debug)
+(global-set-key [f10] 'myproj-debug)
 (global-set-key (kbd "C-c C-l t") 'myproj-tags)
 (global-set-key (kbd "C-c C-l l") 'myproj-launch)

@@ -7,8 +7,9 @@
 #define LEVEL1TEXTUREID 3
 #define ENEMYTEXTUREID 4
 
-// start menu
+// menus
 #define TITLETEXTUREID 1000
+#define VICTORYTEXTUREID 1001
 
 // UI textures
 #define BASICBUTTONTEXTUREID 2000

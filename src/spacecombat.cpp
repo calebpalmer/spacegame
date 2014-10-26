@@ -246,7 +246,9 @@ void SpaceCombatGame::pushState(GameState& gameState){
 }
 
 void SpaceCombatGame::switchState(GameState& gameState){
-  this->popState();
+  for(unsigned int i = 0; i < m_gameStates.size(); i++){
+    this->popState();
+  }
   this->pushState(gameState);
 }
 

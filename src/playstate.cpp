@@ -45,6 +45,9 @@ bool PlayState::onLoad(){
     //upMap.reset(new Map1());
     pMap->init();
     m_world.currentMap = pMap.release();
+
+    unique_ptr<PCM> pMusic(new PCM("res/The_Spread.wav"));
+    m_soundId = Locator::soundPlayer->addSound(pMusic.release());
     
   }
   catch(const exception& e){
@@ -56,7 +59,8 @@ bool PlayState::onLoad(){
 
 bool PlayState::onDestroy(){
   try{
-    NULL;
+    Locator::soundPlayer->deleteSound(m_soundId);
+    return true;
   }
   catch(const exception& e){
     Locator::logger->log(string(e.what()), Logger::CERROR);

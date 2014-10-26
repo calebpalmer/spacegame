@@ -114,10 +114,10 @@ vector<CollisionEvent> World::getCollisions(GameObject& object){
 #ifdef DEBUG
       cout << "collision added: type: " << (event.class_ == COLLISION_WALL ? "wall collision" : "other") << endl;
       if(event.class_ == COLLISION_WALL){
-	cout << "object MBR: (" << object.boundingPolygon().x << "," << object.boundingPolygon().y << ") x (" << object.boundingPolygon().width
+	cout << "Object ID:  " << object.m_objectID  <<", object MBR: (" << object.boundingPolygon().x << "," << object.boundingPolygon().y << ") x (" << object.boundingPolygon().width
 	     << "," << object.boundingPolygon().height << ")" << endl;
-	cout << "Map MBR: (" << 0 << "," << 0 << ") x (" << currentMap->width
-	     << "," << currentMap->height << ")" << endl;
+	cout << "Map MBR: (" << 0 << "," << 0 << ") x (" << currentMap->getWidth()
+	     << "," << currentMap->getHeight() << ")" << endl;
       }
 #endif
     
