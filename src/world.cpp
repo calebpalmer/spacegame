@@ -78,6 +78,7 @@ void World::update(double ms){
 	    if(collisions[i].class_ == COLLISION_WALL){
 	      if((*iter)->objectType != GameObject::Projectile){
 		rollback=true;
+		collisions.erase(collisions.begin() + i);		
 	      }
 	      if((*iter)->objectType == GameObject::Projectile){
 		(*iter)->m_objectState = GameObject::Dead;
