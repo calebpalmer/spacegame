@@ -6,7 +6,7 @@ using namespace std;
 using namespace CapEngine;
 
 TextButton::TextButton(string text, string font, int fontSize, Vector position)
-  : m_text(text), m_font(font), m_fontSize(fontSize), m_position(position)
+  : m_text(text), m_font(font), m_fontSize(fontSize), m_selected(false),  m_position(position)
 {
   // get surface
   FontManager fontManager;
@@ -16,6 +16,8 @@ TextButton::TextButton(string text, string font, int fontSize, Vector position)
 
   m_width = Locator::videoManager->getSurfaceWidth(m_pTextSurfaceInactive);
   m_height = Locator::videoManager->getSurfaceHeight(m_pTextSurfaceInactive);
+
+  Locator::eventDispatcher->subscribe(this, mouseEvent);
 }
 
 TextButton::~TextButton(){
@@ -24,35 +26,30 @@ TextButton::~TextButton(){
   Locator::videoManager->closeSurface(m_pTextSurfaceInactive);
 }
 
-void TextButton::update() {
-  Mouse* mouse = Locator::mouse;
-  // if the mouse button is pressed and it is on top of the button, update button pressed flag
-  if(m_selected == false && mouse->getButtonState(0) == true){
-    int x, y;
-    x = mouse->getx();
-    y = mouse->gety();
-    Rectangle buttonRect(m_position.x, m_position.y, m_width, m_height);
-    Relation relation = MBRRelate(x, y, buttonRect);
-    if(relation == INSIDE || relation == TOUCH){
-      m_selected = true;
-    }
-  }
-  // if mouse button is depressed and mouse is outside of the button, unset the flag
-  if(m_selected == true && mouse->getButtonState(0) == false){
-    int x, y;
-    x = mouse->getx();
-    y = mouse->gety();
-    Rectangle buttonRect(m_position.x, m_position.y, m_width, m_height);
-    Relation relation = MBRRelate(x, y, buttonRect);
-    if(relation == INSIDE || relation == TOUCH){
-      if(m_callback != nullptr){
-	m_callback();
+void TextButton::receiveEvent(const SDL_Event* event, CapEngine::Time* time){
+  if(event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP){
+    if(mouseInButton(Vector(Locator::mouse->getx(), Locator::mouse->gety()))){
+      if(event->type == SDL_MOUSEBUTTONDOWN){
+	m_selected = true;
       }
-      m_selected = false;
+      else{  // MOUSEBUTTONUP
+	if(m_callback != nullptr){
+	  m_selected = false;
+	  m_callback();
+	}
+      }
     }
     else{
       m_selected = false;
     }
+  }
+  delete event;
+}
+
+
+void TextButton::update() {
+  if(!(mouseInButton(Vector(Locator::mouse->getx(), Locator::mouse->gety())))){
+    m_selected = false;
   }
 }
 
@@ -114,3 +111,17 @@ void TextButton::setPosition(const Vector position){
 void TextButton::registerCallback(void (*callback)()) {
   m_callback = callback;
 }
+
+bool TextButton::mouseInButton(Vector position){
+    Rectangle buttonRect(m_position.x, m_position.y, m_width, m_height);
+    Relation relation = MBRRelate(position.x, position.y, buttonRect);
+    if(relation == INSIDE || relation == TOUCH){
+      return true;
+    }
+    else{
+      return false;
+    }
+}
+
+
+

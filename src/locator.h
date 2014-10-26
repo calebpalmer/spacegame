@@ -13,6 +13,7 @@ class Locator{
   static CapEngine::Keyboard* keyboard;
   static CapEngine::Mouse* mouse;
   static CapEngine::AssetManager* assetManager;
+  static CapEngine::EventDispatcher* eventDispatcher;
 };
 
 #endif

@@ -6,7 +6,7 @@
 
 #include <string>
 
-class TextButton : public Button {
+class TextButton : public Button, public IEventSubscriber {
 
  private:
   TextButton(const TextButton&);
@@ -27,6 +27,8 @@ class TextButton : public Button {
   virtual std::string getText() const;
   virtual void setText(const std::string text);
   virtual void setPosition(const CapEngine::Vector position);
+    // IEventSubscriber virtual
+  virtual void receiveEvent(const SDL_Event* event, CapEngine::Time* time); 
 
  protected:
   std::string m_text;
@@ -42,6 +44,8 @@ class TextButton : public Button {
   CapEngine::Vector m_position;
   void (*m_callback)();
 
+ protected:
+  bool mouseInButton(CapEngine::Vector position);
 };
 
 #endif // TEXTBUTTON_H

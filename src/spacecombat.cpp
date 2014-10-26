@@ -80,6 +80,7 @@ void SpaceCombatGame::init() {
   Locator::mouse = &mouse;
   Locator::soundPlayer = &soundPlayer;
   Locator::assetManager = upAssetManager.release();
+  Locator::eventDispatcher = p_eventDispatcher.get();
 
   // add starting GameState
   // unique_ptr<GameState> pGameState(new PlayState(screenConfig.width, screenConfig.height));
