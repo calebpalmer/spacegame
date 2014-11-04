@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<levels>
+  <level number="1" desc="Level 1">
+    <waves>
+      <wave time="1"> 
+	<enemy type="Straight" x_start="384" y_velocity="100"/>
+	<enemy type="Straight" x_start="484" y_velocity="100"/>
+	<enemy type="Straight" x_start="584" y_velocity="100"/>
+	<enemy type="Straight" x_start="684" y_velocity="100"/>
+	<enemy type="Straight" x_start="784" y_velocity="100"/>
+      </wave>
+    </waves>
+  </level>
+</levels>
