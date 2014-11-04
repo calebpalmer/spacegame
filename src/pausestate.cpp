@@ -12,14 +12,14 @@ using namespace CapEngine;
 using namespace std;
 
 PauseState::~PauseState(){
-  for (auto i : m_uiObjects){
+  for (auto& i : m_uiObjects){
     delete i;
   }
 }
 
 void PauseState::render(){
   if(m_uiObjects.size() > 0){
-    for ( auto i : m_uiObjects){
+    for ( auto& i : m_uiObjects){
       i->render();
   }
   }
@@ -28,7 +28,7 @@ void PauseState::render(){
 
 void PauseState::update(double ms){
   if(m_uiObjects.size() > 0){
-    for (auto i : m_uiObjects){
+    for (auto& i : m_uiObjects){
       i->update();
     }
   }

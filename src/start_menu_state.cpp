@@ -34,7 +34,7 @@ StartMenuState::StartMenuState(){
 }
 
 StartMenuState::~StartMenuState(){
-  for (auto i : m_uiObjects){
+  for (auto& i : m_uiObjects){
     delete i;
   }
 }
@@ -65,7 +65,7 @@ void StartMenuState::render(){
 
   Locator::assetManager->draw(TITLETEXTUREID, Rectangle(0, 0, 800, 400), Rectangle(200, 100, 800, 400));
   
-  for( auto i : m_uiObjects){
+  for( auto& i : m_uiObjects){
     i->render();
   }
   
@@ -73,7 +73,7 @@ void StartMenuState::render(){
 
 void StartMenuState::update(double ms){
   m_pMap->update(ms);
-  for( auto i : m_uiObjects){
+  for( auto& i : m_uiObjects){
     i->update();
   }
   
