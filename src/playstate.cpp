@@ -12,6 +12,7 @@
 #include "spacecombat.h"
 #include "start_menu_state.h"
 #include "pausestate.h"
+#include "victory_state.h"
 
 using namespace std;
 using namespace CapEngine;
@@ -86,6 +87,22 @@ void PlayState::update(double ms){
 
   m_world.update(ms);
   m_currentLevel->update(ms, &m_world);
+
+  // Check for end of level
+  if( m_currentLevel->wavesRemaining() == 0 && m_world.countObjects(GameObject::EnemyShip) == 0 ) {
+    // check for next level
+    if(m_currentLevel->getLevelNumber() < m_levels.size() ){
+      // goto next level
+      SpaceCombatGame::getInstance()->switchState(*(new PlayState(m_currentLevel->getLevelNumber() + 1)));
+      return;
+    }
+    else{
+      // end game
+      SpaceCombatGame::getInstance()->switchState(*(new VictoryState()));
+      return;
+    }
+  }
+  
 }
 
 void PlayState::render(){

@@ -39,6 +39,3 @@ tests:
 
 tags:
 	gtags
-	#ctags -e -R . && ctags -e -R -a /usr/include/SDL && ctags -e -R -a $(CAPENGINEPATH)
-
-

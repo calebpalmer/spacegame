@@ -78,10 +78,14 @@ vector<unique_ptr<Level> > parseLevelFile(string filepath){
   return levels;
 }
 
-int Level::getLevelNumber(){
+int Level::getLevelNumber() const {
   return m_levelNumber;
 }
 
-std::string Level::getLevelDescription(){
+std::string Level::getLevelDescription() const {
   return m_levelDescription;
+}
+
+int Level::wavesRemaining() const {
+  return m_enemyWaves.size();
 }

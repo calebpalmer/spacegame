@@ -18,8 +18,9 @@ class Level {
   void addWave(std::unique_ptr<EnemyWave> wave);
   void start();
   void update(double ms, World* world);
-  int getLevelNumber();
-  std::string getLevelDescription();
+  int getLevelNumber() const;
+  std::string getLevelDescription() const;
+  int wavesRemaining() const;
   
  private:
   Level(const Level&);

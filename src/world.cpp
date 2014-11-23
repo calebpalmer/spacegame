@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <cassert>
+#include <algorithm>
 
 using namespace std;
 using namespace CapEngine;
@@ -18,7 +19,7 @@ World::~World(){
 }
 
 void World::addObject(GameObject& object){
-  queuedObjects.push(&object);
+  queuedObjects.push_back(&object);
 }
 
 void World::removeObject(GameObject& object){
@@ -188,11 +189,17 @@ void World::removeObsoleteObjects(){
   }  
 }
 
-
 void World::addQueuedObjects(){
   while(!queuedObjects.empty()){
     gameObjects.push_back(queuedObjects.front());
-    queuedObjects.pop();
+    queuedObjects.erase(queuedObjects.begin());
   }
-  
+}
+
+int World::countObjects(GameObject::ObjectType objectType) const {
+  int activeCount = std::count_if(gameObjects.begin(), gameObjects.end(),
+		       [&] (GameObject* gameObject) { return gameObject->objectType == objectType; } );
+  int queuedCount = std::count_if(queuedObjects.begin(), queuedObjects.end(),
+		       [&] (GameObject* gameObject) { return gameObject->objectType == objectType; } );
+  return activeCount + queuedCount;
 }

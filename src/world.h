@@ -17,11 +17,12 @@ class World{
   void update(double ms);
   void addObject(GameObject& object);
   void removeObject(GameObject& object);
+  int countObjects(GameObject::ObjectType objectType) const;
 
  public:
   Map* currentMap;
   std::vector<GameObject*> gameObjects;
-  std::queue<GameObject*> queuedObjects;
+  std::vector<GameObject*> queuedObjects;
 };
 
 #endif
