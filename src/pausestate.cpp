@@ -11,11 +11,7 @@
 using namespace CapEngine;
 using namespace std;
 
-PauseState::~PauseState(){
-  for (auto& i : m_uiObjects){
-    delete i;
-  }
-}
+PauseState::~PauseState(){}
 
 void PauseState::render(){
   if(m_uiObjects.size() > 0){
@@ -40,6 +36,17 @@ void PauseState::update(double ms){
     SpaceCombatGame::getInstance()->popState();
     return;
   }
+
+  if(m_switchToMenuState){
+    m_switchToMenuState = false;
+    unique_ptr<StartMenuState> p_startMenuState(new StartMenuState);
+    SpaceCombatGame::getInstance()->switchState(*(p_startMenuState.release()));
+  }
+
+  if(m_resumePlayState){
+    m_resumePlayState = false;
+    SpaceCombatGame::getInstance()->popState();
+  }
   
 }
 
@@ -60,8 +67,8 @@ bool PauseState::onLoad(){
   pResumeButton->setPosition(Vector(xStart, yStart));
   pMainMenuButton->setPosition(Vector(xStart, yStart + ((numItems - 1) * (itemHeight + menuItemSpacing) )));
 
-  pResumeButton->registerCallback(this->resumeCallback);
-  pMainMenuButton->registerCallback(this->returnToMenuCallback);
+  pResumeButton->registerCallback(this->resumeCallback, this);
+  pMainMenuButton->registerCallback(this->returnToMenuCallback, this);
   
   m_uiObjects.push_back(pResumeButton.release());
   m_uiObjects.push_back(pMainMenuButton.release());
@@ -71,14 +78,16 @@ bool PauseState::onLoad(){
 }
 
 bool PauseState::onDestroy(){
+  for(unsigned int i = 0; i < m_uiObjects.size(); i++){
+    delete m_uiObjects[i];
+  }
   return true;
 }
 
-void PauseState::returnToMenuCallback(){
-  unique_ptr<StartMenuState> p_startMenuState(new StartMenuState);
-  SpaceCombatGame::getInstance()->switchState(*(p_startMenuState.release()));
+void PauseState::returnToMenuCallback(void* context){
+  reinterpret_cast<PauseState*>(context)->m_switchToMenuState = true;
 }
 
-void PauseState::resumeCallback(){
-  SpaceCombatGame::getInstance()->popState();
+void PauseState::resumeCallback(void* context){
+  reinterpret_cast<PauseState*>(context)->m_resumePlayState = true;
 }

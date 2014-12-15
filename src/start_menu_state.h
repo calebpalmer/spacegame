@@ -20,12 +20,14 @@ class StartMenuState : public GameState {
   virtual bool onLoad();
   virtual bool onDestroy();
 
-  static void startButtonCallback();
-  static void exitButtonCallback();
+  static void startButtonCallback(void* context);
+  static void exitButtonCallback(void* context);
   
  protected:
   int m_menuSelection;
   bool m_enterPressed;
+  bool m_startNewGame;
+  bool m_exitGame;
   int m_windowWidth;
   int m_windowHeight;
   long m_soundId;

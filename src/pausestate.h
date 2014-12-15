@@ -14,10 +14,12 @@ class PauseState : public GameState {
   virtual bool onLoad();
   virtual bool onDestroy();
   
-  static void returnToMenuCallback();
-  static void resumeCallback();
+  static void returnToMenuCallback(void* context);
+  static void resumeCallback(void* context);
  protected:
   bool m_escapePressed;
+  bool m_switchToMenuState;
+  bool m_resumePlayState;
   std::vector<UIObject*> m_uiObjects;
 };
 

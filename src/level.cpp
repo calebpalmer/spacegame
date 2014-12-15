@@ -78,7 +78,7 @@ vector<unique_ptr<Level> > parseLevelFile(string filepath){
   return levels;
 }
 
-int Level::getLevelNumber() const {
+unsigned int Level::getLevelNumber() const {
   return m_levelNumber;
 }
 

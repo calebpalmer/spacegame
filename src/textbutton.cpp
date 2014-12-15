@@ -24,6 +24,7 @@ TextButton::~TextButton(){
   // free surfaces
   Locator::videoManager->closeSurface(m_pTextSurfaceActive);
   Locator::videoManager->closeSurface(m_pTextSurfaceInactive);
+  Locator::eventDispatcher->unsubscribe(this);
 }
 
 void TextButton::receiveEvent(const SDL_Event* event, CapEngine::Time* time){
@@ -35,7 +36,7 @@ void TextButton::receiveEvent(const SDL_Event* event, CapEngine::Time* time){
       else{  // MOUSEBUTTONUP
 	if(m_callback != nullptr){
 	  m_selected = false;
-	  m_callback();
+	  m_callback(m_context);
 	}
       }
     }
@@ -108,8 +109,9 @@ void TextButton::setPosition(const Vector position){
   m_position = position;
 }
 
-void TextButton::registerCallback(void (*callback)()) {
+void TextButton::registerCallback(void (*callback)(void *), void* context) {
   m_callback = callback;
+  m_context = context;
 }
 
 bool TextButton::mouseInButton(Vector position){

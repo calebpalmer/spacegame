@@ -24,9 +24,9 @@ StartMenuState::StartMenuState(){
   int yStart = 500;
   int ySpacing = height + 15;
   pStartButton->setPosition(Vector(xStart, yStart));
-  pStartButton->registerCallback(this->startButtonCallback);
+  pStartButton->registerCallback(this->startButtonCallback, this);
   pExitButton->setPosition(Vector(xStart, 1 * (yStart + ySpacing)));
-  pExitButton->registerCallback(this->exitButtonCallback);
+  pExitButton->registerCallback(this->exitButtonCallback, this);
 
   // add ui objects
   m_uiObjects.push_back(pStartButton.release());
@@ -85,14 +85,22 @@ void StartMenuState::update(double ms){
     // start game
     unique_ptr<GameState> pGameState(new PlayState(1));
     SpaceCombatGame::getInstance()->switchState(*(pGameState.release()));
- }
+  }
+
+  if(m_startNewGame){
+    unique_ptr<GameState> pGameState(new PlayState(1));
+    SpaceCombatGame::getInstance()->switchState(*(pGameState.release()));
+  }
+
+  if(m_exitGame){
+    SpaceCombatGame::getInstance()->exitGame();
+  }
 }
 
-void StartMenuState::startButtonCallback(){
-  unique_ptr<GameState> pGameState(new PlayState(1));
-  SpaceCombatGame::getInstance()->switchState(*(pGameState.release()));
+void StartMenuState::startButtonCallback(void* context){
+  reinterpret_cast<StartMenuState*>(context)->m_startNewGame = true;
 }
 
-void StartMenuState::exitButtonCallback(){
-  SpaceCombatGame::getInstance()->exitGame();
+void StartMenuState::exitButtonCallback(void* context){
+  reinterpret_cast<StartMenuState*>(context)->m_exitGame = true; 
 }

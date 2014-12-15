@@ -18,7 +18,7 @@ class Level {
   void addWave(std::unique_ptr<EnemyWave> wave);
   void start();
   void update(double ms, World* world);
-  int getLevelNumber() const;
+  unsigned int getLevelNumber() const;
   std::string getLevelDescription() const;
   int wavesRemaining() const;
   
@@ -29,7 +29,7 @@ class Level {
 
  protected:
   double m_startTime;
-  int m_levelNumber;
+  unsigned int m_levelNumber;
   std::string m_levelDescription;
   std::vector< std::unique_ptr<EnemyWave> > m_enemyWaves;
  

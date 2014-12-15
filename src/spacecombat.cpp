@@ -236,6 +236,7 @@ void SpaceCombatGame::popState(){
     if(pPoppedState->onDestroy() == false){
       Locator::logger->log("Failed to destroy popped state", Logger::CWARNING);
     }
+    delete pPoppedState;
   }
 }
 
