@@ -31,7 +31,10 @@ class PlayState : public GameState {
   std::vector<std::unique_ptr<Level>> m_levels;
   int m_level;
   Level* m_currentLevel;
-  
+  CapEngine::Surface* m_pTargettingAidSurface;
+
+  void drawTargetingAid();
+
 };
 
 #endif

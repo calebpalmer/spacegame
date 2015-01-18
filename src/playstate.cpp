@@ -18,7 +18,7 @@ using namespace std;
 using namespace CapEngine;
 
 PlayState::PlayState(int level) 
-  : m_startPause(false), m_level(level) {
+  : m_startPause(false), m_level(level), m_pTargettingAidSurface(nullptr) {
   Locator::videoManager->getWindowResolution(&m_screenWidth, &m_screenHeight);
 }
 
@@ -112,5 +112,26 @@ void PlayState::render(){
     (*iter)->render();
   }
 
+  drawTargetingAid();
+  
+}
+
+void PlayState::drawTargetingAid(){
+  // draw targetting aid
+  int startPosX, startPosY;
+  GameObject* pPlayerShip = m_world.getPlayerObject();
+  if(pPlayerShip != nullptr){
+  
+    startPosX = pPlayerShip->position.x;
+    startPosY = pPlayerShip->position.y - (pPlayerShip->boundingPolygon().height / 2.0);
+
+    int targettingAidSurfaceWith = 5;
+    if(m_pTargettingAidSurface == nullptr){
+      m_pTargettingAidSurface = Locator::videoManager->createSurface(targettingAidSurfaceWith, startPosY);
+      CapEngine::drawLine(3, 0, 3, startPosY, m_pTargettingAidSurface, CapEngine::StripedEdge);
+    }
+
+    Locator::videoManager->drawSurface(startPosX, 0, m_pTargettingAidSurface);
+  }
 }
 

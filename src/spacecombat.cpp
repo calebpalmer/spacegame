@@ -62,7 +62,7 @@ void SpaceCombatGame::init() {
 
   // Sound
   SoundPlayer& soundPlayer = SoundPlayer::getSoundPlayer();
-  soundPlayer.setState(UNPAUSE);
+  soundPlayer.setState(PAUSE);
 
   // AssetManager
   unique_ptr<AssetManager> upAssetManager(new AssetManager(*(p_videoManager.get()), soundPlayer, assetFilePath));
@@ -248,7 +248,7 @@ void SpaceCombatGame::pushState(GameState& gameState){
 }
 
 void SpaceCombatGame::switchState(GameState& gameState){
-  for(unsigned int i = 0; i < m_gameStates.size(); i++){
+  while(!m_gameStates.empty()){
     this->popState();
   }
   this->pushState(gameState);

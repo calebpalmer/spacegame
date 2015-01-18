@@ -20,6 +20,9 @@ World::~World(){
 
 void World::addObject(GameObject& object){
   queuedObjects.push_back(&object);
+  if(object.objectType == GameObject::PlayerShip){
+    m_pPlayerShip = &object;
+  }
 }
 
 void World::removeObject(GameObject& object){
@@ -94,6 +97,10 @@ void World::update(double ms){
       if( !rollback ){
 	delete *iter;
 	*iter = newObject.release();
+
+	if((*iter)->objectType == GameObject::PlayerShip){
+	  m_pPlayerShip == *iter;
+	}
       }
     }  // if object is not dead or inactive
   }  // gameobject loop
@@ -202,4 +209,17 @@ int World::countObjects(GameObject::ObjectType objectType) const {
   int queuedCount = std::count_if(queuedObjects.begin(), queuedObjects.end(),
 		       [&] (GameObject* gameObject) { return gameObject->objectType == objectType; } );
   return activeCount + queuedCount;
+}
+
+GameObject* World::getPlayerObject() const {
+  //return m_pPlayerShip;
+  GameObject* playerShip = nullptr;
+  
+  for(auto i : gameObjects){
+    if(i->objectType == GameObject::PlayerShip){
+      playerShip = i;
+    }
+  }
+  // this should never happen, but if it does, shame on me.
+  return playerShip;
 }
