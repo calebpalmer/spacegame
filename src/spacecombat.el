@@ -1,4 +1,4 @@
-(require 'compile)
+ (require 'compile)
 
 (defun myproj-clean ()
   (interactive)
@@ -36,6 +36,5 @@
 (global-set-key [f11] 'myproj-clean)
 (global-set-key [f10] 'myproj-debug)
 (global-set-key (kbd "C-c C-l t") 'myproj-tags)
-(global-set-key (kbd "C-c C-l l") 'myproj-launch)
-
+(global-set-key (kbd "C-c C-r") 'myproj-launch)
 (global-set-key (kbd "M-.") 'gtags-find-tag)
