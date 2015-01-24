@@ -62,7 +62,7 @@ void SpaceCombatGame::init() {
 
   // Sound
   SoundPlayer& soundPlayer = SoundPlayer::getSoundPlayer();
-  soundPlayer.setState(PAUSE);
+  soundPlayer.setState(UNPAUSE);
 
   // AssetManager
   unique_ptr<AssetManager> upAssetManager(new AssetManager(*(p_videoManager.get()), soundPlayer, assetFilePath));
