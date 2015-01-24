@@ -41,11 +41,13 @@ void PauseState::update(double ms){
     m_switchToMenuState = false;
     unique_ptr<StartMenuState> p_startMenuState(new StartMenuState);
     SpaceCombatGame::getInstance()->switchState(*(p_startMenuState.release()));
+    return;
   }
 
   if(m_resumePlayState){
     m_resumePlayState = false;
     SpaceCombatGame::getInstance()->popState();
+    return;
   }
   
 }
