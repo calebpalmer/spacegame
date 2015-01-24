@@ -12,7 +12,8 @@
 using namespace std;
 using namespace CapEngine;
 
-StartMenuState::StartMenuState(){
+StartMenuState::StartMenuState() :
+  m_startNewGame(false){
   // Create UIObjects 
   unique_ptr<TextButton> pStartButton(new TextButton("Play", "res/tahoma.ttf", 40, Vector(-1.0, -1.0)));
   unique_ptr<TextButton> pExitButton(new TextButton("Exit", "res/tahoma.ttf", 40, Vector(-1.0, -1.0)));
