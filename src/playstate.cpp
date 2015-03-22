@@ -18,9 +18,13 @@ using namespace std;
 using namespace CapEngine;
 
 PlayState::PlayState(int level) 
-  : m_startPause(false), m_level(level), m_pTargettingAidSurface(nullptr) {
+  : m_startPause(false), m_level(level), m_pTargettingAidSurface(nullptr)
+  ,m_drawTargettingAid(false)
+{
   Locator::videoManager->getWindowResolution(&m_screenWidth, &m_screenHeight);
 }
+
+PlayState::~PlayState(){}
 
 bool PlayState::onLoad(){
   try{
@@ -41,15 +45,16 @@ bool PlayState::onLoad(){
     upShip->position = position;
     upShip->m_objectState = GameObject::Active;
     m_world.addObject(*(upShip.release()));
-
+    
     unique_ptr<Map> pMap(new Map1());
-    //upMap.reset(new Map1());
     pMap->init();
     m_world.currentMap = pMap.release();
 
     unique_ptr<PCM> pMusic(new PCM("res/The_Spread.wav"));
     m_soundId = Locator::soundPlayer->addSound(pMusic.release());
-    
+
+    // subscribe for keyboard events
+    Locator::eventDispatcher->subscribe(this, keyboardEvent);
   }
   catch(const exception& e){
     Locator::logger->log(string(e.what()), Logger::CERROR);
@@ -61,14 +66,13 @@ bool PlayState::onLoad(){
 bool PlayState::onDestroy(){
   try{
     Locator::soundPlayer->deleteSound(m_soundId);
+    Locator::eventDispatcher->unsubscribe(this);
     return true;
   }
   catch(const exception& e){
     Locator::logger->log(string(e.what()), Logger::CERROR);
     return false;
   }
-  
-  return true;
 }
 
 void PlayState::update(double ms){
@@ -80,6 +84,9 @@ void PlayState::update(double ms){
   if(Locator::keyboard->keyMap[Keyboard::CAP_ESCAPE].state == Keyboard::CAP_PRESSED){
     m_startPause = true;
   }
+  // check for toggling of targetting aid
+  //if(Locator::keyboard->keyMap[Keyboard::CAP_
+  
   if(m_startPause && Locator::keyboard->keyMap[Keyboard::CAP_ESCAPE].state == Keyboard::CAP_UNPRESSED){
     SpaceCombatGame::getInstance()->pushState(*(new PauseState()));
     m_startPause = false;
@@ -112,7 +119,9 @@ void PlayState::render(){
     (*iter)->render();
   }
 
-  drawTargetingAid();
+  if(m_drawTargettingAid){
+    drawTargetingAid();
+  }
   
 }
 
@@ -135,3 +144,12 @@ void PlayState::drawTargetingAid(){
   }
 }
 
+void PlayState::receiveEvent(const SDL_Event* event, CapEngine::Time* time){
+  if(event->type == SDL_KEYUP){
+    const SDL_KeyboardEvent* keyboardEvent = reinterpret_cast<const SDL_KeyboardEvent*>(event);
+    // Toggle the targetting aid if "t" is pressed
+    if(keyboardEvent->type == SDL_KEYUP && keyboardEvent->keysym.sym == SDLK_t){
+      m_drawTargettingAid = !m_drawTargettingAid;
+    }
+  }
+}

@@ -13,16 +13,19 @@
 #include <vector>
 #include <memory>
 
-class PlayState : public GameState {
+class PlayState : public GameState, public IEventSubscriber {
  public:
   PlayState(int level);
-  virtual ~PlayState() {};
+  virtual ~PlayState();
   virtual void render();
   virtual void update(double ms);
   virtual bool onLoad();
   virtual bool onDestroy();
+  virtual void receiveEvent(const SDL_Event* event, CapEngine::Time* time);
 
  private:
+  void drawTargetingAid();
+  
   int m_screenWidth;
   int m_screenHeight;
   World m_world;
@@ -32,9 +35,7 @@ class PlayState : public GameState {
   int m_level;
   Level* m_currentLevel;
   CapEngine::Surface* m_pTargettingAidSurface;
-
-  void drawTargetingAid();
-
+  bool m_drawTargettingAid;
 };
 
 #endif
